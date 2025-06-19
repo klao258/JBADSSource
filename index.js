@@ -91,7 +91,8 @@
     createView()
 
     $('body').on('click', 'button[type="submit"]', function () {
-        console.log('提交按钮被点击了');
+        console.log('提交按钮被点击了', $('input[name="ads"]').val()?.toLocaleLowerCase());
+
         if($('input[name="ads"]').val()?.toLocaleLowerCase()?.includes('ads')){
             $('#buttonContainer').show()
         } else {
