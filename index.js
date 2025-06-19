@@ -197,7 +197,6 @@
             delete item['uinfoUrl']
         }
 
-        console.log('123', userList)
-        // await post('/user/sync', {...item, platform})
+        await post('/user/sync', { users: userList })
     }
 })()
