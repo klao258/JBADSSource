@@ -156,27 +156,34 @@
 
         let users = userList?.map(v => ({ platform, ucode: v.ucode }))
         let userRes = await post('/user/batch', { users })
-        console.log('userRes', userRes);
         
-
-        return false
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
         for (const item of userList) {
-            let uinfohtml = await getHTML(item.uinfoUrl)
-            $(uinfohtml).find('.pageFormContent dl').each(function(){
-                let label = $(this).find('dt')?.text()
-                let value = $(this).find('dd input')?.val()
+            if(userRes?.length && userRes?.find(v => v.ucode === item.ucode)) {
+                // 已经存在的用户
+                let user = userRes.find(v => v.ucode === item.ucode)
+                item['ads'] = user.ads || ''
+                item['createDate'] = user.createDate || ''
+                item['tgcode'] = user.tgcode || ''
+                item['tgname'] = user.tgname || ''          
+            } else {
+                // 新用户
+                let uinfohtml = await getHTML(item.uinfoUrl)
+                $(uinfohtml).find('.pageFormContent dl').each(function(){
+                    let label = $(this).find('dt')?.text()
+                    let value = $(this).find('dd input')?.val()
 
-                if (label?.includes('注册时间')) {
-                    item['createDate'] = value?.trim() || ''
-                } else if(label?.includes('机器人id')){
-                    item['tgcode'] = CryptoJS.AES.encrypt((value?.trim() || ''), key).toString()
-                } else if (label?.includes('飞机@编码')){
-                    item['tgname'] = CryptoJS.AES.encrypt((value?.trim() || ''), key).toString()
-                } else if (label?.includes('ads')){
-                    item['ads'] = $(this).find('dd')?.text()?.trim() || ''
-                }
-            })
+                    if (label?.includes('注册时间')) {
+                        item['createDate'] = value?.trim() || ''
+                    } else if(label?.includes('机器人id')){
+                        item['tgcode'] = CryptoJS.AES.encrypt((value?.trim() || ''), key).toString()
+                    } else if (label?.includes('飞机@编码')){
+                        item['tgname'] = CryptoJS.AES.encrypt((value?.trim() || ''), key).toString()
+                    } else if (label?.includes('ads')){
+                        item['ads'] = $(this).find('dd')?.text()?.trim() || ''
+                    }
+                })
+            }
 
             // 有找到更新ADS到视图，
             if(item['_this'].children()?.eq(1)?.children()?.length === 1){
@@ -187,8 +194,8 @@
 
             delete item['_this']
             delete item['uinfoUrl']
+
             await post('/user/sync', {...item, platform})
         }
     }
-
 })()
