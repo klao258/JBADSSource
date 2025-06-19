@@ -90,7 +90,7 @@
     }
     createView()
 
-    $('form').on('submit', function (e) {
+    $('body').on('submit', 'form', function (e) {
         e.preventDefault(); // 阻止真正提交（你如果用 Ajax 提交必须加）
     
         const inputVal = $('input[name="ads"]').val();
