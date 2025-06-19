@@ -165,7 +165,8 @@
                 item['ads'] = user.ads || ''
                 item['createDate'] = user.createDate || ''
                 item['tgcode'] = user.tgcode || ''
-                item['tgname'] = user.tgname || ''          
+                item['tgname'] = user.tgname || ''
+                item['platform'] = user.platform || platform          
             } else {
                 // 新用户
                 item['platform'] = platform
