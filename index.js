@@ -168,6 +168,7 @@
                 item['tgname'] = user.tgname || ''          
             } else {
                 // 新用户
+                item['platform'] = platform
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 $(uinfohtml).find('.pageFormContent dl').each(function(){
                     let label = $(this).find('dt')?.text()
@@ -194,8 +195,9 @@
 
             delete item['_this']
             delete item['uinfoUrl']
-
-            await post('/user/sync', {...item, platform})
         }
+
+        console.log('123', userList)
+        // await post('/user/sync', {...item, platform})
     }
 })()
