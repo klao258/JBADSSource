@@ -90,23 +90,19 @@
     }
     createView()
 
-    let isSubmitting = false;
-    $('body').on('click', 'button[type="submit"]', function () {
-        if (isSubmitting) return;
-        isSubmitting = true;
-
-        setTimeout(() => { isSubmitting = false }, 300); // 300ms内只允许一次点击
-
+    $('form').on('submit', function (e) {
         const inputVal = $('input[name="ads"]').val();
         const lowerVal = typeof inputVal === 'string' ? inputVal.toLowerCase() : '';
-
+    
         console.log('提交按钮被点击了', lowerVal);
-
+    
         if (lowerVal.includes('ads')) {
             $('#buttonContainer').show();
         } else {
             $('#buttonContainer').hide();
         }
+    
+        // 如果你还想提交表单，再手动触发 Ajax 或 this.submit()
     });
 
     // 获取html
