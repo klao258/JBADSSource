@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         TG广告发布自动化脚本
 // @namespace    https://klao258.github.io/
-// @version      2025.06.19-18:45:23
+// @version      2025.06.19-19:35:05
 // @description  JB旗下ADS数据源 
 // @author       老k
 // @match        https://ads.telegram.org/*
