@@ -36,5 +36,7 @@
         }
     }
 
-    console.log('主程序', $)
+    $('body').on('click', 'button[type="submit"]', function () {
+        console.log('提交按钮被点击了');
+    });
 })()
