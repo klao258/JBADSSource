@@ -91,9 +91,11 @@
     createView()
 
     $('form').on('submit', function (e) {
+        e.preventDefault(); // 阻止真正提交（你如果用 Ajax 提交必须加）
+    
         const inputVal = $('input[name="ads"]').val();
         const lowerVal = typeof inputVal === 'string' ? inputVal.toLowerCase() : '';
-    
+
         console.log('提交按钮被点击了', lowerVal);
     
         if (lowerVal.includes('ads')) {
@@ -101,8 +103,7 @@
         } else {
             $('#buttonContainer').hide();
         }
-    
-        // 如果你还想提交表单，再手动触发 Ajax 或 this.submit()
+        this.submit()
     });
 
     // 获取html
