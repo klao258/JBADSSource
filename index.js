@@ -39,7 +39,7 @@
             })
             res = await res?.json()
             if (res.code === 0) {
-                return true
+                return res?.data || true
             }
             return false
         } catch (err) {
