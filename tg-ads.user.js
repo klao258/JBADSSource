@@ -9,6 +9,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=telegram.org
 // @updateURL    https://klao258.github.io/JBADSSource/tg-ads.user.js
 // @downloadURL  https://klao258.github.io/JBADSSource/tg-ads.user.js
+// @require      https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js
 // @grant        GM_addStyle
 // @grant        none
 // @run-at       document-start

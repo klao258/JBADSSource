@@ -2,6 +2,11 @@
     "use strict";
 
     const dataHost = 'https://jbjtads.sso66s.cc'; // 数据接口域名
+    /**
+    *** 解密：const text = CryptoJS.AES.decrypt(encrypted, key).toString(CryptoJS.enc.Utf8);
+    */
+    const key = 'JB';
+    
     let platform = ''
     if(window.location.host.includes('jbht888')) {
         platform = '金貝飞投'
@@ -139,7 +144,7 @@
             let children = $(item)?.children()
             let href = $(item).find('a[title="用户查看"]').attr('href')
 
-            let uinfoUrl = `${window.host}${href}`
+            let uinfoUrl = `${window.location.origin}/${href}`
             let ucode = children?.eq(2)?.text()
             let uname = children?.eq(1)?.children()?.eq(0)?.text()
             let upcode = children?.eq(5)?.text()
