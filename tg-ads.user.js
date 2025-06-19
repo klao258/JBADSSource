@@ -4,8 +4,8 @@
 // @version      2025.06.19-19:44:37
 // @description  JB旗下ADS数据源 
 // @author       老k
-// @match        http://jbht888.top/login#001001010003
-// @match        https://zs696.cn/login#001001010003
+// @match        http://jbht888.top/login
+// @match        https://zs696.cn/login
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=telegram.org
 // @updateURL    https://klao258.github.io/JBADSSource/tg-ads.user.js
 // @downloadURL  https://klao258.github.io/JBADSSource/tg-ads.user.js
@@ -84,5 +84,6 @@
         }
     }
 
+    console.log('脚本已生效');
 })();
   
