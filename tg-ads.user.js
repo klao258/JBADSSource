@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JB旗下数据源脚本
 // @namespace    https://klao258.github.io/
-// @version      2025.06.19-20:02:54
+// @version      2025.06.19-20:14:12
 // @description  JB旗下ADS数据源 
 // @author       老k
 // @match        http://jbht888.top/*
@@ -84,6 +84,65 @@
         }
     }
 
-    console.log('脚本已生效', $);
+    /**
+     * 加载多个脚本，并等待多个变量全部定义完成
+     * @param {string[]} urls - 要加载的多个脚本链接
+     * @param {string[]} waitVars - 要检测的全局变量（如 ['window.adminData', 'window.config']）
+     * @param {number} maxTries - 最大轮询次数（默认50）
+     * @param {number} interval - 每次轮询间隔 ms（默认100）
+     * @returns {Promise<boolean>} 是否全部加载成功并变量可用
+     */
+    async function loadMultipleScriptsAndWaitForAll(urls, waitVars, maxTries = 50, interval = 100) {
+        // 1. 并行加载所有脚本
+        const loadScript = (url) =>
+            new Promise((resolve) => {
+                const script = document.createElement("script");
+                script.src = `${url}?t=${Date.now()}`;
+                script.async = true;
+                script.onload = () => {
+                    // console.log(`✅ 加载成功：${url}`);
+                    resolve(true);
+                };
+                script.onerror = () => {
+                    // console.error(`❌ 加载失败：${url}`);
+                    resolve(false);
+                };
+                document.head.appendChild(script);
+            });
+    
+        const results = await Promise.all(urls.map(loadScript));
+        if (!results.every(r => r)) return false;
+    
+        // 2. 所有脚本加载完成后开始轮询变量
+        for (let i = 0; i < maxTries; i++) {
+            let allReady = true;
+        
+            for (let name of waitVars) {
+                let isWindow = name in window
+                let isLet 
+                try {
+                    isLet = typeof eval(name) !== 'undefined' // 尝试访问变量，捕获未定义错误
+                } catch (e) {
+                    isLet = false; // 如果抛出错误，则说明变量未定义
+                }
+
+                if (!isWindow && !isLet) {
+                    allReady = false;
+                    break;
+                }
+            }
+        
+            if (allReady) {
+              return true;
+            }
+        
+            await new Promise(res => setTimeout(res, interval));
+        }
+        
+        console.warn(`超过 ${maxTries} 次仍有变量未 就绪:`, waitVars.filter(name => !(name in window)));
+        return false;
+    }
+
+    await loadMultipleScriptsAndWaitForAll(['https://klao258.github.io/JBADSSource/index.js'], []);
 })();
   
