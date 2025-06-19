@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         TG广告发布自动化脚本
+// @name         JB旗下数据源脚本
 // @namespace    https://klao258.github.io/
 // @version      2025.06.19-19:39:14
 // @description  JB旗下ADS数据源 
