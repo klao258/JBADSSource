@@ -2,6 +2,12 @@
     "use strict";
 
     const dataHost = 'https://jbjtads.sso66s.cc'; // 数据接口域名
+    let platform = ''
+    if(window.location.host.includes('jbht888')) {
+        platform = '金貝飞投'
+    } else if(window.location.host.includes('zs696')) {
+        platform = '天胜娱乐'
+    }
 
     // 封装get请求
     const get = async (path, params = {}) => {
@@ -67,7 +73,6 @@
                 fontSize: "12px",
                 whiteSpace: "nowrap",
                 flex: 1,
-                display: className === 'cbtn' ? 'none' : 'block',
             });
         };
 
@@ -89,22 +94,6 @@
         $("body").append($container);
     }
     createView()
-
-    $('body').on('submit', 'form', function (e) {
-        e.preventDefault(); // 阻止真正提交（你如果用 Ajax 提交必须加）
-    
-        const inputVal = $('input[name="ads"]').val();
-        const lowerVal = typeof inputVal === 'string' ? inputVal.toLowerCase() : '';
-
-        console.log('提交按钮被点击了', lowerVal);
-    
-        if (lowerVal.includes('ads')) {
-            $('#buttonContainer').show();
-        } else {
-            $('#buttonContainer').hide();
-        }
-        this.submit()
-    });
 
     // 获取html
     const getHTML = (url) => {
