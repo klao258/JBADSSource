@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JB旗下数据源脚本
 // @namespace    https://klao258.github.io/
-// @version      2025.06.19-20:32:12
+// @version      2025.06.19-21:47:19
 // @description  JB旗下ADS数据源 
 // @author       老k
 // @match        http://jbht888.top/*
@@ -9,6 +9,7 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=telegram.org
 // @updateURL    https://klao258.github.io/JBADSSource/tg-ads.user.js
 // @downloadURL  https://klao258.github.io/JBADSSource/tg-ads.user.js
+// @require      https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js
 // @grant        GM_addStyle
 // @grant        none
 // @run-at       document-start
