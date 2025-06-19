@@ -139,7 +139,7 @@
             let children = $(item)?.children()
             let href = $(item).find('a[title="用户查看"]').attr('href')
 
-            let uinfoUrl = `${host}${href}`
+            let uinfoUrl = `${window.host}${href}`
             let ucode = children?.eq(2)?.text()
             let uname = children?.eq(1)?.children()?.eq(0)?.text()
             let upcode = children?.eq(5)?.text()
