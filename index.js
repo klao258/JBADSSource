@@ -90,15 +90,24 @@
     }
     createView()
 
+    let isSubmitting = false;
     $('body').on('click', 'button[type="submit"]', function () {
-        console.log('提交按钮被点击了', $('input[name="ads"]').val()?.toLocaleLowerCase());
+        if (isSubmitting) return;
+        isSubmitting = true;
 
-        if($('input[name="ads"]').val()?.toLocaleLowerCase()?.includes('ads')){
-            $('#buttonContainer').show()
+        setTimeout(() => { isSubmitting = false }, 300); // 300ms内只允许一次点击
+
+        const inputVal = $('input[name="ads"]').val();
+        const lowerVal = typeof inputVal === 'string' ? inputVal.toLowerCase() : '';
+
+        console.log('提交按钮被点击了', lowerVal);
+
+        if (lowerVal.includes('ads')) {
+            $('#buttonContainer').show();
         } else {
-            $('#buttonContainer').hide()
+            $('#buttonContainer').hide();
         }
-    })
+    });
 
     // 获取html
     const getHTML = (url) => {
