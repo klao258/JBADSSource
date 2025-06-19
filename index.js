@@ -117,7 +117,7 @@
         console.log('准备同步到数据库')
 
         // 所有数据
-        const users = []
+        const userList = []
 
         // 不在这个面板直接return
         const tableID = $('.navTab-tab .selected').attr('tabid')
@@ -151,11 +151,17 @@
             let upname = children?.eq(6)?.text()
             let amount = children?.eq(9)?.text()
 
-            users.push({ uinfoUrl, ucode, uname, upcode, upname, amount, _this })
+            userList.push({ uinfoUrl, ucode, uname, upcode, upname, amount, _this })
         })
 
+        let users = userList?.map(v => ({ platform, ucode: v.ucode }))
+        let userRes = await post('/user/batch', { users })
+        console.log('userRes', userRes);
+        
+
+        return false
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
-        for (const item of users) {
+        for (const item of userList) {
             let uinfohtml = await getHTML(item.uinfoUrl)
             $(uinfohtml).find('.pageFormContent dl').each(function(){
                 let label = $(this).find('dt')?.text()
