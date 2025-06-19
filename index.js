@@ -195,11 +195,7 @@
             delete item['_this']
             delete item['uinfoUrl']
 
-            console.log('userRes', userRes);
-
-            return false
             await post('/user/sync', {...item, platform})
         }
     }
-
 })()
