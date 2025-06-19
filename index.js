@@ -67,12 +67,13 @@
                 fontSize: "12px",
                 whiteSpace: "nowrap",
                 flex: 1,
+                display: className === 'cbtn' ? 'none' : 'block',
             });
         };
 
         // 添加按钮
         const buttons = [
-            createButton("同步到库", "dbBtn", () => asyncDB()),
+            createButton("同步到库", "cbtn", () => asyncDB()),
             // createButton("同步DB", "dbBtn", () => updateDB()),
             // createButton("报表", "reportBtn", () => onReport()),
             // createButton("删除row", "delDBBtn", () => onDelRow()),
