@@ -247,5 +247,6 @@
             }
         }
         console.log('users', users);
+        await post('/user/sync', { users: userList })
     }
 })()
