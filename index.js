@@ -207,14 +207,18 @@
     const getPcodeData = async () => {
         const res = await get('/user/upcode')
         console.log('按上级统计数据', res?.data)
+
+        const users = []
         for(let obj of res.data){
             if(obj['users']?.length <= 4000) {
                 for(let row of obj['users']) {
                     const tgcode = CryptoJS.AES.decrypt(row.tgcode, key).toString(CryptoJS.enc.Utf8);
                     const tgname = CryptoJS.AES.decrypt(row.tgname, key).toString(CryptoJS.enc.Utf8);
-                    console.log(`解密: ${ucode} - ${tgcode} - ${tgname}`);
+                    users.push({...row, tgcode, tgname})
                 }
             }
         }
+        console.log('users', users);
+        
     }
 })()
