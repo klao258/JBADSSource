@@ -254,8 +254,8 @@
             result.push(users.slice(i, i + 1000));
         }
         for(let v of result){
-            console.log('v', v);
-            // await post('/user/sync', { users })
+            await post('/user/sync', { users: v })
+            console.log('成功', v);
         }
 
     }
