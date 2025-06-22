@@ -47,6 +47,34 @@
         }
     }
 
+    // 加密
+    const encryptAESBrowser = (text, keyStr = 'JBJT', ivStr = '0000000000000000') => {
+        const key = CryptoJS.enc.Utf8.parse(keyStr);
+        const iv = CryptoJS.enc.Utf8.parse(ivStr);
+      
+        const encrypted = CryptoJS.AES.encrypt(text, key, {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+      
+        return encrypted.toString(); // Base64 string
+    }
+
+    // 解密
+    const decryptAES = (text, keyStr = 'JBJT', ivStr = '0000000000000000') => {
+        const key = CryptoJS.enc.Utf8.parse(keyStr);
+        const iv = CryptoJS.enc.Utf8.parse(ivStr);
+      
+        const decrypted = CryptoJS.AES.decrypt(text, key, {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+      
+        return decrypted.toString(CryptoJS.enc.Utf8);
+    }
+
     // 创建更新按钮
     const createView = () => {
         // 创建容器
@@ -180,9 +208,9 @@
                     if (label?.includes('注册时间')) {
                         item['createDate'] = value?.trim() || ''
                     } else if(label?.includes('机器人id')){
-                        item['tgcode'] = CryptoJS.AES.encrypt((value?.trim() || ''), key).toString()
+                        item['tgcode'] = encryptAESBrowser((value?.trim() || ''))
                     } else if (label?.includes('飞机@编码')){
-                        item['tgname'] = CryptoJS.AES.encrypt((value?.trim() || ''), key).toString()
+                        item['tgname'] = encryptAESBrowser((value?.trim() || ''))
                     } else if (label?.includes('ads')){
                         item['ads'] = $(this).find('dd')?.text()?.trim() || ''
                     }
@@ -214,11 +242,10 @@
                 for(let row of obj['users']) {
                     const tgcode = CryptoJS.AES.decrypt(row.tgcode, key).toString(CryptoJS.enc.Utf8);
                     const tgname = CryptoJS.AES.decrypt(row.tgname, key).toString(CryptoJS.enc.Utf8);
-                    users.push({...row, tgcode, tgname})
+                    users.push({...row, tgcode: encryptAESBrowser(tgcode), tgname: encryptAESBrowser(tgname) })
                 }
             }
         }
         console.log('users', users);
-        
     }
 })()
