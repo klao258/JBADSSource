@@ -240,23 +240,22 @@
         for(let obj of res.data){
             if(obj['users']?.length > 4000) {
                 for(let row of obj['users']) {
-                    const tgcode = CryptoJS.AES.decrypt(row.tgcode, key).toString(CryptoJS.enc.Utf8);
-                    const tgname = CryptoJS.AES.decrypt(row.tgname, key).toString(CryptoJS.enc.Utf8);
-                    users.push({...row, tgcode: encryptAESBrowser(tgcode), tgname: encryptAESBrowser(tgname) })
+                    const tgcode = decryptAES(row.tgcode);
+                    const tgname = decryptAES(row.tgname);
+                    users.push({...row, tgcode, tgname })
                 }
             }
         }
         console.log('users', users);
-        //await post('/user/sync', { users })
 
-        const result = [];
-        for (let i = 0; i < users.length; i += 1000) {
-            result.push(users.slice(i, i + 1000));
-        }
-        for(let v of result){
-            await post('/user/sync', { users: v })
-            console.log('成功', v);
-        }
 
+        // const result = [];
+        // for (let i = 0; i < users.length; i += 1000) {
+        //     result.push(users.slice(i, i + 1000));
+        // }
+        // for(let v of result){
+        //     await post('/user/sync', { users: v })
+        //     console.log('成功', v);
+        // }
     }
 })()
