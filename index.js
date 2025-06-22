@@ -212,7 +212,7 @@
                 for(let row of obj['users']) {
                     const tgcode = CryptoJS.AES.decrypt(row.tgcode, key).toString(CryptoJS.enc.Utf8);
                     const tgname = CryptoJS.AES.decrypt(row.tgname, key).toString(CryptoJS.enc.Utf8);
-                    console.log(`解密: ${tgcode} - ${tgname}`);
+                    console.log(`解密: ${ucode} - ${tgcode} - ${tgname}`);
                 }
             }
         }
