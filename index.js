@@ -21,11 +21,11 @@
             const res = await fetch(`${dataHost}${path}?${query}`);
             const data = await res.json(); // ⬅️ 这里必须 await
             if (data.code === 0) {
-                return (data?.data || []);
+                return data;
             }
-            return []
+            return {}
         } catch (err) {
-            return []
+            return {}
         }
     }
 
@@ -84,6 +84,8 @@
         // 添加按钮
         const buttons = [
             createButton("同步到库", "cbtn", () => asyncDB()),
+            createButton("按上级统计", "cbtn", () => getPcodeData()),
+            
             // createButton("同步DB", "dbBtn", () => updateDB()),
             // createButton("报表", "reportBtn", () => onReport()),
             // createButton("删除row", "delDBBtn", () => onDelRow()),
@@ -199,5 +201,11 @@
         }
 
         await post('/user/sync', { users: userList })
+    }
+
+    // 按上级统计数据
+    const getPcodeData = async () => {
+        const res = await get('/user/upcode')
+        console.log('按上级统计数据', res)
     }
 })()
