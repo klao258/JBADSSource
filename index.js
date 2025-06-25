@@ -113,6 +113,8 @@
         const buttons = [
             createButton("同步到库", "cbtn", () => asyncDB()),
             createButton("按上级统计", "cbtn", () => getPcodeData()),
+            createButton("统计帖子效果", "cbtn", () => getAdsStatis()),
+            
             
             // createButton("同步DB", "dbBtn", () => updateDB()),
             // createButton("报表", "reportBtn", () => onReport()),
@@ -257,5 +259,11 @@
         //     await post('/user/sync', { users: v })
         //     console.log('成功', v);
         // }
+    }
+
+    // 统计帖子注册充值数据
+    const getAdsStatis = async () => {
+        const res = await get('/user/upcode')
+        console.log('按上级统计数据', res?.data)
     }
 })()
