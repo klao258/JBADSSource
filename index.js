@@ -263,7 +263,7 @@
 
     // 统计帖子注册充值数据
     const getAdsStatis = async () => {
-        const res = await get('/user/upcode')
+        const res = await get('/user/getAdsStatis')
         console.log('按上级统计数据', res?.data)
     }
 })()
