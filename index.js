@@ -324,7 +324,11 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(res, "text/html");
 
+        console.log(doc)
+
         const rows = doc?.querySelectorAll?.(".pageContent .grid .gridTbody table tbody tr");
+
+        console.log(rows)
 
         if (rows.length === 0) return []; // ❌ 无数据
         const result = [];
