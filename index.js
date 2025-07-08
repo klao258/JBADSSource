@@ -320,7 +320,8 @@
         let timestamp = Date.now(); // 例如：1751961796751
         let url = `http://jbht888.top/cpuser/cpuservisit?id2=${id}&_=${timestamp}`
         let doc = await getHTML(url)
-        const rows = doc.querySelectorAll(".pageContent .grid .gridTbody table tbody tr");
+        console.log(doc)
+        const rows = doc?.querySelectorAll?.(".pageContent .grid .gridTbody table tbody tr");
 
         if (rows.length === 0) return []; // ❌ 无数据
         const result = [];
