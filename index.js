@@ -324,10 +324,7 @@
         let html = await res.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
-
-        console.log(doc)
-
-        const rows = doc?.querySelectorAll?.(".pageContent .grid .gridTbody table tbody tr");
+        const rows = doc?.querySelectorAll?.(".pageContent .table tbody tr");
 
         console.log(rows)
 
