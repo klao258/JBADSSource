@@ -321,8 +321,9 @@
         let url = `http://jbht888.top/cpuser/cpuservisit?id2=${id}&_=${timestamp}`
 
         const res = await fetch(url);
+        let html = await res.text();
         const parser = new DOMParser();
-        const doc = parser.parseFromString(res, "text/html");
+        const doc = parser.parseFromString(html, "text/html");
 
         console.log(doc)
 
