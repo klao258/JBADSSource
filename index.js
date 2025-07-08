@@ -334,14 +334,13 @@
             const tds = tr.querySelectorAll("td");
             if (tds.length >= 6) {
             result.push({
-                username: tds[1].innerText.trim(),
-                userCode: tds[2].innerText.trim(),
-                parentUsername: tds[4].innerText.trim(),
-                parentUserCode: tds[5].innerText.trim()
+                uname: tds[1].innerText.trim(),
+                ucode: tds[2].innerText.trim(),
+                pname: tds[4].innerText.trim(),
+                pcode: tds[5].innerText.trim()
             });
             }
         });
         return result
     }
-    
 })()
