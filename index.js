@@ -114,7 +114,7 @@
             createButton("同步到库", "cbtn", () => asyncDB()),
             createButton("按上级统计", "cbtn", () => getPcodeData()),
             createButton("统计帖子效果", "cbtn", () => getAdsStatis()),
-            // createButton("批量查询同设备", "cbtn", () => batchSearchDevice()),
+            createButton("批量查询同设备", "cbtn", () => batchSearchDevice()),
             
             
             // createButton("同步DB", "dbBtn", () => updateDB()),
@@ -319,8 +319,12 @@
     const searchDevice = async (id) => {
         let timestamp = Date.now(); // 例如：1751961796751
         let url = `http://jbht888.top/cpuser/cpuservisit?id2=${id}&_=${timestamp}`
-        let doc = await getHTML(url)
-        const rows = doc?.[0]?.querySelectorAll?.(".pageContent .grid .gridTbody table tbody tr");
+
+        const res = await fetch(url);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(res, "text/html");
+
+        const rows = doc?.querySelectorAll?.(".pageContent .grid .gridTbody table tbody tr");
 
         if (rows.length === 0) return []; // ❌ 无数据
         const result = [];
