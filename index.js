@@ -270,12 +270,15 @@
 
     // 查询同设备
     const batchSearchDevice = async () => {
-        const ucodes = ['22497']
+        const list = {}
+        const ucodes = ['22497', '53377', '64777', '64782']
         for (const code of ucodes) {
             let id = await searchUserId(code)
             if(!id) return false
-            let html = await searchDevice(id)
+            let devices = await searchDevice(id)
+            list[code] = devices
         }
+        console.log('查询结果', list)
     }
 
     // 查询同设备
@@ -316,8 +319,23 @@
     const searchDevice = async (id) => {
         let timestamp = Date.now(); // 例如：1751961796751
         let url = `http://jbht888.top/cpuser/cpuservisit?id2=${id}&_=${timestamp}`
-        let html = await getHTML(url)
-        console.log(html)
+        let doc = await getHTML(url)
+        const rows = doc.querySelectorAll(".pageContent .grid .gridTbody table tbody tr");
+
+        if (rows.length === 0) return []; // ❌ 无数据
+        const result = [];
+        rows.forEach(tr => {
+            const tds = tr.querySelectorAll("td");
+            if (tds.length >= 6) {
+            result.push({
+                username: tds[1].innerText.trim(),
+                userCode: tds[2].innerText.trim(),
+                parentUsername: tds[4].innerText.trim(),
+                parentUserCode: tds[5].innerText.trim()
+            });
+            }
+        });
+        return result
     }
     
 })()
