@@ -114,6 +114,7 @@
             createButton("同步到库", "cbtn", () => asyncDB()),
             createButton("按上级统计", "cbtn", () => getPcodeData()),
             createButton("统计帖子效果", "cbtn", () => getAdsStatis()),
+            createButton("批量查询同设备", "cbtn", () => batchSearchDevice()),
             
             
             // createButton("同步DB", "dbBtn", () => updateDB()),
@@ -266,4 +267,57 @@
         const res = await get('/user/getAdsStatis')
         console.log('按上级统计数据', res?.data)
     }
+
+    // 查询同设备
+    const batchSearchDevice = async () => {
+        const ucodes = ['22497']
+        for (const code of ucodes) {
+            let id = await searchUserId(code)
+            if(!id) return false
+            let html = await searchDevice(id)
+        }
+    }
+
+    // 查询同设备
+    const searchUserId = async (code) => {
+        const params = new URLSearchParams();
+        params.append('pageNum', '1');
+        params.append('ucode', code);
+        params.append('type', '2');
+      
+        const keys = [
+          "uname", "upucode", "level", "viplevel", "iscw", "ishaveback", "loginname",
+          "email", "uanum", "jiangsmons", "jiangemons", "smons", "emons", "scztimes",
+          "ecztimes", "winsmons", "winemons", "czurl", "txurl", "loginstarttime",
+          "loginendtime", "remark", "status", "cantx", "starttime", "endtime"
+        ];
+      
+        keys.forEach(key => params.append(key, ''));
+      
+        const res = await fetch('http://jbht888.top/cpuser/index2', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+          },
+          body: params.toString(), // ⬅️ 转成 URL 编码字符串
+          credentials: "include" // ⬅️ 如果你登录了需要携带 cookie
+        });
+      
+        let html = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const rows = doc.querySelectorAll(".pageContent .table tbody tr");
+
+
+        if (rows.length === 0) return ''
+        const id = rows?.[0]?.getAttribute?.("rel") || '';
+        return id
+    };
+    const searchDevice = async (id) => {
+        let timestamp = Date.now(); // 例如：1751961796751
+        let url = `http://jbht888.top/cpuser/cpuservisit?id2=${id}&_=${timestamp}`
+        let html = await getHTML(url)
+        console.log(html)
+    }
+    
 })()
