@@ -114,7 +114,7 @@
             createButton("同步到库", "cbtn", () => asyncDB()),
             createButton("按上级统计", "cbtn", () => getPcodeData()),
             createButton("统计帖子效果", "cbtn", () => getAdsStatis()),
-            createButton("批量查询同设备", "cbtn", () => batchSearchDevice()),
+            // createButton("批量查询同设备", "cbtn", () => batchSearchDevice()),
             
             
             // createButton("同步DB", "dbBtn", () => updateDB()),
