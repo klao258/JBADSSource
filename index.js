@@ -213,7 +213,7 @@
 
         // 所有按钮封装函数
         const createButton = (text, className, clickFn, auth = false) => {
-            if(!isLK || !auth) return false
+            if(!isLK && !auth) return false
 
             return $("<button>", {
                 text,
