@@ -271,7 +271,7 @@
     // 查询同设备
     const batchSearchDevice = async () => {
         const list = {}
-        const ucodes = ['22497', '53377', '64777', '64782']
+        const ucodes = ['185186']
         for (const code of ucodes) {
             let id = await searchUserId(code)
             if(!id) return false
