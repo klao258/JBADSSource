@@ -209,6 +209,8 @@
     // 创建更新按钮
     const createView = () => {
         let isLK = $('#header .headerNav .nav').text()?.includes('老K')
+        console.log('isLK', isLK);
+        
 
         // 创建容器
         const $container = $("<div>", {
