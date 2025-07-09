@@ -18,17 +18,14 @@
         const cssUrl = 'https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css';
         const jsUrl = 'https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js';
     
-        // 加载资源：Tabulator 的 CSS 和 JS
+        // 加载资源（只加载一次）
         function loadTabulator(callback) {
-          // 加载 CSS（只加载一次）
           if (!document.querySelector(`link[href="${cssUrl}"]`)) {
             const css = document.createElement('link');
             css.rel = 'stylesheet';
             css.href = cssUrl;
             document.head.appendChild(css);
           }
-    
-          // 加载 JS（只加载一次）
           if (!window.Tabulator) {
             const script = document.createElement('script');
             script.src = jsUrl;
@@ -39,7 +36,7 @@
           }
         }
     
-        // 格式化原始数据
+        // 格式化数据
         function formatData(data) {
           return Object.entries(data).map(([key, users]) => ({
             code: key,
@@ -47,20 +44,63 @@
           }));
         }
     
-        // 渲染表格
-        function render(data) {
-          let container = document.getElementById('gridContainer');
-          if (!container) {
-            container = document.createElement('div');
-            container.id = 'gridContainer';
-            container.style = 'margin-top: 20px;';
-            document.body.appendChild(container);
-          }
-          container.innerHTML = '';
+        // 渲染弹窗
+        function renderTable(data) {
+          // 避免重复创建
+          if (document.getElementById('gridModal')) return;
     
-          new Tabulator(container, {
-            height: "300px",
+          // 遮罩
+          const overlay = document.createElement('div');
+          overlay.id = 'gridModal';
+          overlay.style = `
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+          `;
+    
+          // 弹窗内容
+          const modal = document.createElement('div');
+          modal.style = `
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-height: 80%;
+            overflow: auto;
+            position: relative;
+          `;
+    
+          // 关闭按钮
+          const closeBtn = document.createElement('div');
+          closeBtn.innerText = '✖';
+          closeBtn.style = `
+            position: absolute;
+            top: 10px; right: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+          `;
+          closeBtn.onclick = () => document.body.removeChild(overlay);
+    
+          // 表格容器
+          const tableDiv = document.createElement('div');
+          tableDiv.id = 'gridContainer';
+          tableDiv.style = 'margin-top: 10px;';
+    
+          // 加入弹窗元素
+          modal.appendChild(closeBtn);
+          modal.appendChild(tableDiv);
+          overlay.appendChild(modal);
+          document.body.appendChild(overlay);
+    
+          // 渲染 Tabulator 表格
+          new Tabulator("#gridContainer", {
             layout: "fitColumns",
+            height: "400px",
             data,
             columns: [
               { title: "用户编码", field: "code", sorter: "string", headerFilter: true },
@@ -71,10 +111,10 @@
           });
         }
     
-        // 加载并渲染
+        // 主流程
         loadTabulator(() => {
           const formatted = formatData(rawData);
-          render(formatted);
+          renderTable(formatted);
         });
     }
 
