@@ -196,6 +196,8 @@
 
     // 创建更新按钮
     const createView = () => {
+        let isLK = $('#header .headerNav .nav').text()?.includes('老K')
+
         // 创建容器
         const $container = $("<div>", {
             id: "buttonContainer",
@@ -210,7 +212,9 @@
         });
 
         // 所有按钮封装函数
-        const createButton = (text, className, clickFn) => {
+        const createButton = (text, className, clickFn, auth = false) => {
+            if(!isLK || !auth) return false
+
             return $("<button>", {
                 text,
                 class: className,
@@ -233,7 +237,7 @@
             createButton("同步到库", "cbtn", () => asyncDB()),
             createButton("按上级统计", "cbtn", () => getPcodeData()),
             createButton("统计帖子效果", "cbtn", () => getAdsStatis()),
-            createButton("批量查询同设备", "cbtn", () => batchSearchDevice()),
+            createButton("批量查询同设备", "device", () => batchSearchDevice(), true),
             
             
             // createButton("同步DB", "dbBtn", () => updateDB()),
