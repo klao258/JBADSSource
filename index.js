@@ -31,76 +31,94 @@
         document.body.appendChild(tabulatorScript);
       
         function initPopup() {
-          // 添加基础样式
-          const style = document.createElement('style');
-          style.textContent = `
-            .my-popup-mask {
-              position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-              background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 9999;
-            }
-            .my-popup-content {
-              background: white; padding: 20px; border-radius: 8px; width: 80%; max-height: 90%;
-              display: flex; flex-direction: column;
-            }
-            .my-popup-header {
-              margin-bottom: 10px;
-            }
-            .my-popup-header input {
-              padding: 6px; width: 300px; margin-right: 10px;
-            }
-            .my-popup-body {
-              flex: 1; overflow: auto;
-            }
-            .my-popup-close {
-              position: absolute; top: 10px; right: 20px; font-size: 20px; cursor: pointer;
-            }
-          `;
-          document.head.appendChild(style);
+            // 添加基础样式
+            const style = document.createElement('style');
+            style.textContent = `
+                .my-popup-mask {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 9999;
+                }
+                .my-popup-content {
+                background: white; padding: 20px; border-radius: 8px; width: 80%; max-height: 90%;
+                display: flex; flex-direction: column;
+                }
+                .my-popup-header {
+                margin-bottom: 10px;
+                }
+                .my-popup-header input {
+                padding: 6px; width: 300px; margin-right: 10px;
+                }
+                .my-popup-body {
+                flex: 1; overflow: auto;
+                }
+                .my-popup-close {
+                position: absolute; top: 10px; right: 20px; font-size: 20px; cursor: pointer;
+                }
+                .tabulator{
+                    background-color: #f1f1f1 !important;
+                }
+            `;
+            document.head.appendChild(style);
       
-          // 创建弹窗 DOM
-          const popup = document.createElement('div');
-          popup.className = 'my-popup-mask';
-          popup.innerHTML = `
-            <div class="my-popup-content">
-              <div class="my-popup-close">×</div>
-              <div class="my-popup-header">
-                <input type="text" id="tab-search-input" placeholder="请输入 ucode，多个用英文逗号分隔" />
-                <button id="tab-search-btn">查询</button>
-              </div>
-              <div class="my-popup-body">
-                <div id="tabulator-table"></div>
-              </div>
-            </div>
-          `;
-          document.body.appendChild(popup);
+            // 创建弹窗 DOM
+            const popup = document.createElement('div');
+            popup.className = 'my-popup-mask';
+            popup.innerHTML = `
+                <div class="my-popup-content">
+                <div class="my-popup-close">×</div>
+                <div class="my-popup-header">
+                    <input type="text" id="tab-search-input" placeholder="请输入 ucode，多个用英文逗号分隔" />
+                    <button id="tab-search-btn">查询</button>
+                </div>
+                <div class="my-popup-body">
+                    <div id="tabulator-table"></div>
+                </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
       
-          // 关闭弹窗逻辑
-          popup.querySelector('.my-popup-close').onclick = () => popup.style.display = 'none';
+            // 关闭弹窗逻辑
+            popup.querySelector('.my-popup-close').onclick = () => popup.style.display = 'none';
       
-          // 初始化表格
-          const table = new Tabulator("#tabulator-table", {
-            height: "300px",
-            layout: "fitColumns",
-            columns: [
-              { title: "用户ID", field: "ucode" },
-              { title: "同设备", field: "status" }
-            ],
-            data: [] // 默认无数据
-          });
+            // 初始化表格
+            const table = new Tabulator("#tabulator-table", {
+                height: "300px",
+                layout: "fitColumns",
+                columns: [
+                { title: "用户ID", field: "code" },
+                { title: "同设备", field: "users" }
+                ],
+                data: [] // 默认无数据
+            });
+
+            const formatData = (data) => {
+                return Object.entries(data).map(([key, users]) => ({
+                    code: key,
+                    users: users.map(u => `${u.uname}(${u.ucode})`).join('，')
+                }));
+            }
       
-          // 查询按钮点击逻辑
-          document.getElementById('tab-search-btn').onclick = () => {
-            const input = document.getElementById('tab-search-input').value.trim();
-            const ucodes = input.split(',').map(s => s.trim()).filter(Boolean);
-            // 模拟数据加载
-            const data = ucodes.map((u, i) => ({ id: i + 1, ucode: u, status: "正常" }));
-            table.setData(data);
-          };
+            // 查询按钮点击逻辑
+            document.getElementById('tab-search-btn').onclick = async () => {
+                const input = document.getElementById('tab-search-input').value.trim();
+                const ucodes = input.replace(/，/g, ',').split(',').map(s => s.trim()).filter(Boolean);
+
+                if(!ucodes?.length) return false
+
+                const list = {}
+                for (const code of ucodes) {
+                    let id = await searchUserId(code)
+                    if(!id) return false
+                    let devices = await searchDevice(id)
+                    list[code] = devices
+                }
+                table.setData(formatData(list));
+            };
       
-          // 暴露一个方法用于显示弹窗
-          window.showModel = () => {
-            popup.style.display = 'flex';
-          };
+            // 暴露一个方法用于显示弹窗
+            window.showModel = () => {
+                popup.style.display = 'flex';
+            };
         }
     }
     createModel()
