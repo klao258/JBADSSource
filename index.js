@@ -18,38 +18,9 @@
         const cssUrl = 'https://unpkg.com/gridjs/dist/theme/mermaid.min.css';
         const jsUrl = 'https://unpkg.com/gridjs/dist/gridjs.umd.js';
     
-        function formatData(data) {
-          return Object.entries(data).map(([key, arr]) => {
-            const users = arr.map(u => `${u.uname}(${u.ucode})`).join('，');
-            return [key, users];
-          });
-        }
-    
-        function renderGrid(data) {
-            const containerId = 'gridContainer';
-            let container = document.getElementById(containerId);
-          
-            // 如果不存在容器，自动创建
-            if (!container) {
-              container = document.createElement('div');
-              container.id = containerId;
-              container.style = "margin-top: 20px;"; // 可以加样式
-              document.body.appendChild(container);
-            }
-          
-            container.innerHTML = ''; // 清空旧内容
-          
-            new window.gridjs.Grid({
-              columns: ['用户编码', '用户详情'],
-              data,
-              pagination: true,
-              search: true,
-              sort: true
-            }).render(container);
-        }
-    
-        function loadResourcesAndRender(callback) {
-          // 只加载一次 CSS
+        // 加载资源（仅加载一次）
+        function loadGridJSResources(callback) {
+          // 加载 CSS
           if (!document.querySelector(`link[href="${cssUrl}"]`)) {
             const css = document.createElement('link');
             css.rel = 'stylesheet';
@@ -57,23 +28,57 @@
             document.head.appendChild(css);
           }
     
-          // 只加载一次 JS
+          // 加载 JS
           if (!window.gridjs) {
             const script = document.createElement('script');
             script.src = jsUrl;
-            script.onload = callback;
+            script.onload = () => {
+              callback();
+            };
             document.head.appendChild(script);
           } else {
             callback();
           }
         }
     
-        // 执行加载 + 渲染
-        loadResourcesAndRender(() => {
+        // 格式化二维数组
+        function formatData(data) {
+          return Object.entries(data).map(([key, arr]) => {
+            const users = arr.map(u => `${u.uname}(${u.ucode})`).join('，');
+            return [key, users];
+          });
+        }
+    
+        // 渲染表格
+        function renderGrid(data) {
+          let container = document.getElementById("gridContainer");
+    
+          // 如果不存在容器则创建
+          if (!container) {
+            container = document.createElement("div");
+            container.id = "gridContainer";
+            container.style = "margin-top: 20px; padding:10px;";
+            document.body.appendChild(container);
+          }
+    
+          container.innerHTML = ''; // 清空旧内容
+    
+          // ✅ 注意：使用 window.gridjs.Grid
+          new window.gridjs.Grid({
+            columns: ['用户编码', '用户详情'],
+            data,
+            pagination: true,
+            search: true,
+            sort: true
+          }).render(container);
+        }
+    
+        // 加载资源并渲染
+        loadGridJSResources(() => {
           const formatted = formatData(rawData);
           renderGrid(formatted);
         });
-    }
+      }
 
     // 封装get请求
     const get = async (path, params = {}) => {
