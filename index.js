@@ -14,6 +14,61 @@
         platform = '天胜娱乐'
     }
 
+    const showGridTable = (rawData) => {
+        const cssUrl = 'https://unpkg.com/gridjs/dist/theme/mermaid.min.css';
+        const jsUrl = 'https://unpkg.com/gridjs/dist/gridjs.umd.js';
+    
+        function formatData(data) {
+          return Object.entries(data).map(([key, arr]) => {
+            const users = arr.map(u => `${u.uname}(${u.ucode})`).join('，');
+            return [key, users];
+          });
+        }
+    
+        function renderGrid(data) {
+          const containerId = 'gridContainer';
+          let container = document.getElementById(containerId);
+    
+          // 清空容器
+          container.innerHTML = '';
+    
+          // 渲染 Grid 表格
+          new window.gridjs.Grid({
+            columns: ['用户编码', '用户详情'],
+            data,
+            pagination: true,
+            search: true,
+            sort: true
+          }).render(container);
+        }
+    
+        function loadResourcesAndRender(callback) {
+          // 只加载一次 CSS
+          if (!document.querySelector(`link[href="${cssUrl}"]`)) {
+            const css = document.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = cssUrl;
+            document.head.appendChild(css);
+          }
+    
+          // 只加载一次 JS
+          if (!window.gridjs) {
+            const script = document.createElement('script');
+            script.src = jsUrl;
+            script.onload = callback;
+            document.head.appendChild(script);
+          } else {
+            callback();
+          }
+        }
+    
+        // 执行加载 + 渲染
+        loadResourcesAndRender(() => {
+          const formatted = formatData(rawData);
+          renderGrid(formatted);
+        });
+    }
+
     // 封装get请求
     const get = async (path, params = {}) => {
         try {
@@ -288,6 +343,7 @@
             list[code] = devices
         }
         console.log('查询结果', list)
+        showGridTable(list)
     }
 
     // 查询同设备
