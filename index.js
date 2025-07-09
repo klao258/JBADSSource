@@ -31,7 +31,6 @@
         document.body.appendChild(tabulatorScript);
       
         function initPopup() {
-            // 添加基础样式
             const style = document.createElement('style');
             style.textContent = `
                 .my-popup-mask {
@@ -54,7 +53,7 @@
                     flex: 1; overflow: auto;
                 }
                 .my-popup-close {
-                    position: absolute; top: 10px; right: 20px; font-size: 20px; cursor: pointer;
+                    position: absolute; top: -16px; right: -16px; font-size: 32px; padding: 5px 10px; cursor: pointer;
                 }
                 .tabulator{
                     background-color: #FFFFFF !important;
@@ -87,17 +86,20 @@
                 height: "300px",
                 layout: "fitColumns",
                 columns: [
-                { title: "用户ID", field: "code", width: '100' },
-                { title: "同设备", field: "users" }
+                    { title: "用户名", field: "uname", width: '100' },
+                    { title: "用户id", field: "ucode", width: '100' },
+                    { title: "同设备", field: "devicesStr" }
                 ],
                 data: [] // 默认无数据
             });
 
-            const formatData = (data) => {
-                return Object.entries(data).map(([key, users]) => ({
-                    code: key,
-                    users: users.map(u => `${u.uname}(${u.ucode})`).join('，')
-                }));
+            const formatData = (list) => {
+                list.map(v => ({
+                    ...v,
+                    ucode: v.id,
+                    uname: v.uname,
+                    devicesStr: devices.map(u => `${u.uname}(${u.ucode})`).join('，')
+                }))
             }
       
             // 查询按钮点击逻辑
@@ -107,12 +109,12 @@
 
                 if(!ucodes?.length) return false
 
-                const list = {}
+                const list = []
                 for (const code of ucodes) {
-                    let id = await searchUserId(code)
+                    let {uname, id} = await searchUserId(code)
                     if(!id) return false
                     let devices = await searchDevice(id)
-                    list[code] = devices
+                    list.push({ id, uname, devices })
                 }
                 table.setData(formatData(list));
             };
@@ -414,11 +416,12 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
         const rows = doc.querySelectorAll(".pageContent .table tbody tr");
+        const uname = document.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(2)")?.textContent.trim();
 
 
         if (rows.length === 0) return ''
         const id = rows?.[0]?.getAttribute?.("rel") || '';
-        return id
+        return { uname, id }
     };
     const searchDevice = async (id) => {
         let timestamp = Date.now(); // 例如：1751961796751
