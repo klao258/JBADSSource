@@ -98,7 +98,7 @@
                     ...v,
                     ucode: v.id,
                     uname: v.uname,
-                    devicesStr: devices.map(u => `${u.uname}(${u.ucode})`).join('，')
+                    devicesStr: v.devices.map(u => `${u.uname}(${u.ucode})`).join('，')
                 }))
             }
       
