@@ -270,8 +270,17 @@
 
     // 查询同设备
     const batchSearchDevice = async () => {
+        const input = prompt('请输入用户 code，多个用英文/中文逗号分隔：');
+    
+        if (!input) return false
+
+        const cleaned = input.replace(/，/g, ',');
+        const trimmed = cleaned.replace(/\s+/g, '').replace(/^,+|,+$/g, '');
+        const ucodes = trimmed.split(',').filter(Boolean);
+
+        if(!ucodes?.length) return false
+
         const list = {}
-        const ucodes = ['185186']
         for (const code of ucodes) {
             let id = await searchUserId(code)
             if(!id) return false
