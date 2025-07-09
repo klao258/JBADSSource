@@ -93,14 +93,13 @@
                 data: [] // 默认无数据
             });
 
-            const formatData = (list) => {
-                list.map(v => ({
-                    ...v,
-                    ucode: v.ucode,
-                    uname: v.uname,
-                    devicesStr: v.devices.map(u => `${u.uname}(${u.ucode})`).join('，')
-                }))
-            }
+            const formatData = (list) => list.map(v => ({
+                ...v,
+                ucode: v.ucode,
+                uname: v.uname,
+                devicesStr: v.devices.map(u => `${u.uname}(${u.ucode})`).join('，')
+            }))
+            
       
             // 查询按钮点击逻辑
             document.getElementById('tab-search-btn').onclick = async () => {
@@ -420,11 +419,10 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
         const rows = doc.querySelectorAll(".pageContent .table tbody tr");
-        const uname = document.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(2)")?.textContent.trim();
-        console.log('uname', uname)
-
 
         if (rows.length === 0) return ''
+        const uname = doc.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(2)")?.textContent.trim();
+
         const id = rows?.[0]?.getAttribute?.("rel") || '';
         return { uname, id }
     };
