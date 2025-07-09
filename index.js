@@ -15,15 +15,14 @@
     }
 
     const showGridTable = (rawData) => {
-        const jsUrl = 'https://cdn.jsdelivr.net/npm/gridjs@6.0.6/dist/gridjs.umd.js';
         const cssUrl = 'https://cdn.jsdelivr.net/npm/gridjs@6.0.6/dist/theme/mermaid.min.css';
-
+        const jsUrl = 'https://cdn.jsdelivr.net/npm/gridjs@6.0.6/dist/gridjs.umd.js';
     
-        let currentGridInstance = null; // 保存当前 Grid 实例
+        let currentGridInstance = null; // 用于销毁上一个实例
     
-        // ✅ 加载 Grid.js 和 CSS
-        function loadGridJSResources(callback) {
-          // 只加载一次 CSS
+        // 1. 加载资源（CSS + JS）
+        function loadGridResources(callback) {
+          // 加载 CSS（只加载一次）
           if (!document.querySelector(`link[href="${cssUrl}"]`)) {
             const css = document.createElement('link');
             css.rel = 'stylesheet';
@@ -31,7 +30,7 @@
             document.head.appendChild(css);
           }
     
-          // 加载 JS
+          // 加载 JS（只加载一次）
           if (!window.gridjs) {
             const script = document.createElement('script');
             script.src = jsUrl;
@@ -42,37 +41,33 @@
           }
         }
     
-        // ✅ 格式化数据为二维数组
+        // 2. 格式化原始对象为二维数组
         function formatData(data) {
-          return Object.entries(data).map(([key, arr]) => {
-            const users = arr.map(u => `${u.uname}(${u.ucode})`).join('，');
-            return [key, users];
+          return Object.entries(data).map(([key, users]) => {
+            const userStr = users.map(u => `${u.uname}(${u.ucode})`).join('，');
+            return [key, userStr];
           });
         }
     
-        // ✅ 渲染 Grid 表格
+        // 3. 渲染 Grid 表格
         function renderGrid(data) {
-          let container = document.getElementById("gridContainer");
-    
-          // 若无容器，创建之
+          let container = document.getElementById('gridContainer');
           if (!container) {
-            container = document.createElement("div");
-            container.id = "gridContainer";
-            container.style = "margin-top: 20px; padding: 10px;";
+            container = document.createElement('div');
+            container.id = 'gridContainer';
+            container.style = 'margin-top: 20px; padding: 10px;';
             document.body.appendChild(container);
           }
-    
           container.innerHTML = ''; // 清空旧内容
     
-          // 若已有实例则销毁，防止报错
+          // 销毁之前的实例，避免冲突
           if (currentGridInstance && typeof currentGridInstance.destroy === 'function') {
             currentGridInstance.destroy();
           }
     
-          // ✅ 创建新实例
           currentGridInstance = new window.gridjs.Grid({
             columns: ['用户编码', '用户详情'],
-            data,
+            data: data,
             pagination: true,
             search: true,
             sort: true
@@ -81,8 +76,8 @@
           currentGridInstance.render(container);
         }
     
-        // ✅ 流程入口
-        loadGridJSResources(() => {
+        // 执行流程
+        loadGridResources(() => {
           const formatted = formatData(rawData);
           renderGrid(formatted);
         });
