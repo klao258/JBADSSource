@@ -96,7 +96,7 @@
             const formatData = (list) => {
                 list.map(v => ({
                     ...v,
-                    ucode: v.id,
+                    ucode: v.ucode,
                     uname: v.uname,
                     devicesStr: v.devices.map(u => `${u.uname}(${u.ucode})`).join('，')
                 }))
@@ -110,14 +110,15 @@
                 if(!ucodes?.length) return false
 
                 const list = []
-                for (const code of ucodes) {
-                    let {uname, id} = await searchUserId(code)
+                for (const ucode of ucodes) {
+                    let {uname, id} = await searchUserId(ucode)
                     if(!id) return false
                     let devices = await searchDevice(id)
-                    list.push({ id, uname, devices })
+
+                    list.push({ ucode, uname, devices })
                 }
 
-                console.log('数据', list);
+                console.log('数据', formatData(list));
                 
                 table.setData(formatData(list));
             };
@@ -420,6 +421,7 @@
         const doc = parser.parseFromString(html, "text/html");
         const rows = doc.querySelectorAll(".pageContent .table tbody tr");
         const uname = document.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(2)")?.textContent.trim();
+        console.log('uname', uname)
 
 
         if (rows.length === 0) return ''
