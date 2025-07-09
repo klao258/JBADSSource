@@ -104,7 +104,7 @@
             
       
             // 查询按钮点击逻辑
-            document.getElementById('tab-search-btn').onclick = async () => {
+            const doSearch = async () => {
                 const input = document.getElementById('tab-search-input').value.trim();
                 const ucodes = input.replace(/，/g, ',').split(',').map(s => s.trim()).filter(Boolean);
 
@@ -118,11 +118,23 @@
 
                     list.push({ ucode, uname, devices })
                 }
-
-                console.log('数据', formatData(list));
-                
                 table.setData(formatData(list));
             };
+
+            const btn = document.getElementById('tab-search-btn');
+            const input = document.getElementById('tab-search-input'); // 替换为你的输入框 id
+
+            // 点击按钮事件
+            btn.onclick = function () {
+                doSearch(); // 你自定义的搜索函数
+            };
+
+            // 回车事件绑定在输入框上
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    btn.click(); // 模拟点击按钮
+                }
+            });
       
             // 暴露一个方法用于显示弹窗
             window.showModel = () => {
@@ -234,9 +246,9 @@
 
         // 添加按钮
         const buttons = [
-            createButton("同步到库", "cbtn", () => asyncDB()),
-            createButton("按上级统计", "cbtn", () => getPcodeData()),
-            createButton("统计帖子效果", "cbtn", () => getAdsStatis()),
+            createButton("同步到库", "cbtn", () => asyncDB(), false),
+            createButton("按上级统计", "cbtn", () => getPcodeData(), false),
+            createButton("统计帖子效果", "cbtn", () => getAdsStatis(), false),
             createButton("批量查询同设备", "device", () => batchSearchDevice(), true),
             
             
