@@ -116,6 +116,9 @@
                     let devices = await searchDevice(id)
                     list.push({ id, uname, devices })
                 }
+
+                console.log('数据', list);
+                
                 table.setData(formatData(list));
             };
       
