@@ -88,7 +88,8 @@
                 columns: [
                     { title: "用户名", field: "uname", width: '100' },
                     { title: "用户id", field: "ucode", width: '100' },
-                    { title: "同设备", field: "devicesStr" }
+                    { title: "同设备个数", field: "devicesNum", width: '100' },
+                    { title: "同设备明细", field: "devicesStr" }
                 ],
                 data: [] // 默认无数据
             });
@@ -97,7 +98,8 @@
                 ...v,
                 ucode: v.ucode,
                 uname: v.uname,
-                devicesStr: v.devices.map(u => `${u.uname}(${u.ucode})`).join('，')
+                devicesNum: v.devices?.length,
+                devicesStr: v.devices.map(u => `${u.uname}(${u.ucode})`).join('、')
             }))
             
       
