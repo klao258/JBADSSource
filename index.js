@@ -18,9 +18,11 @@
         const cssUrl = 'https://unpkg.com/gridjs/dist/theme/mermaid.min.css';
         const jsUrl = 'https://unpkg.com/gridjs/dist/gridjs.umd.js';
     
-        // 加载资源（仅加载一次）
+        let currentGridInstance = null; // 保存当前 Grid 实例
+    
+        // ✅ 加载 Grid.js 和 CSS
         function loadGridJSResources(callback) {
-          // 加载 CSS
+          // 只加载一次 CSS
           if (!document.querySelector(`link[href="${cssUrl}"]`)) {
             const css = document.createElement('link');
             css.rel = 'stylesheet';
@@ -32,16 +34,14 @@
           if (!window.gridjs) {
             const script = document.createElement('script');
             script.src = jsUrl;
-            script.onload = () => {
-              callback();
-            };
+            script.onload = callback;
             document.head.appendChild(script);
           } else {
             callback();
           }
         }
     
-        // 格式化二维数组
+        // ✅ 格式化数据为二维数组
         function formatData(data) {
           return Object.entries(data).map(([key, arr]) => {
             const users = arr.map(u => `${u.uname}(${u.ucode})`).join('，');
@@ -49,36 +49,43 @@
           });
         }
     
-        // 渲染表格
+        // ✅ 渲染 Grid 表格
         function renderGrid(data) {
           let container = document.getElementById("gridContainer");
     
-          // 如果不存在容器则创建
+          // 若无容器，创建之
           if (!container) {
             container = document.createElement("div");
             container.id = "gridContainer";
-            container.style = "margin-top: 20px; padding:10px;";
+            container.style = "margin-top: 20px; padding: 10px;";
             document.body.appendChild(container);
           }
     
           container.innerHTML = ''; // 清空旧内容
     
-          // ✅ 注意：使用 window.gridjs.Grid
-          new window.gridjs.Grid({
+          // 若已有实例则销毁，防止报错
+          if (currentGridInstance && typeof currentGridInstance.destroy === 'function') {
+            currentGridInstance.destroy();
+          }
+    
+          // ✅ 创建新实例
+          currentGridInstance = new window.gridjs.Grid({
             columns: ['用户编码', '用户详情'],
             data,
             pagination: true,
             search: true,
             sort: true
-          }).render(container);
+          });
+    
+          currentGridInstance.render(container);
         }
     
-        // 加载资源并渲染
+        // ✅ 流程入口
         loadGridJSResources(() => {
           const formatted = formatData(rawData);
           renderGrid(formatted);
         });
-      }
+    }
 
     // 封装get请求
     const get = async (path, params = {}) => {
