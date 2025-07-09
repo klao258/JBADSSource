@@ -35,27 +35,29 @@
             const style = document.createElement('style');
             style.textContent = `
                 .my-popup-mask {
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 9999;
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 9999;
                 }
                 .my-popup-content {
-                background: white; padding: 20px; border-radius: 8px; width: 80%; max-height: 90%;
-                display: flex; flex-direction: column;
+                    background: white; padding: 20px; border-radius: 8px; width: 80%; max-height: 90%;
+                    display: flex; 
+                    flex-direction: column;
                 }
                 .my-popup-header {
-                margin-bottom: 10px;
+                    position: relative;
+                    text-align: left;
                 }
                 .my-popup-header input {
-                padding: 6px; width: 300px; margin-right: 10px;
+                    padding: 2px 5px; width: 600px;
                 }
                 .my-popup-body {
-                flex: 1; overflow: auto;
+                    flex: 1; overflow: auto;
                 }
                 .my-popup-close {
-                position: absolute; top: 10px; right: 20px; font-size: 20px; cursor: pointer;
+                    position: absolute; top: 10px; right: 20px; font-size: 20px; cursor: pointer;
                 }
                 .tabulator{
-                    background-color: #f1f1f1 !important;
+                    background-color: #FFFFFF !important;
                 }
             `;
             document.head.appendChild(style);
@@ -65,14 +67,14 @@
             popup.className = 'my-popup-mask';
             popup.innerHTML = `
                 <div class="my-popup-content">
-                <div class="my-popup-close">×</div>
-                <div class="my-popup-header">
-                    <input type="text" id="tab-search-input" placeholder="请输入 ucode，多个用英文逗号分隔" />
-                    <button id="tab-search-btn">查询</button>
-                </div>
-                <div class="my-popup-body">
-                    <div id="tabulator-table"></div>
-                </div>
+                    <div class="my-popup-header">
+                        <input type="text" id="tab-search-input" placeholder="请输入 ucode，多个用英文逗号分隔" />
+                        <button id="tab-search-btn">查询</button>
+                        <div class="my-popup-close">×</div>
+                    </div>
+                    <div class="my-popup-body">
+                        <div id="tabulator-table"></div>
+                    </div>
                 </div>
             `;
             document.body.appendChild(popup);
@@ -85,7 +87,7 @@
                 height: "300px",
                 layout: "fitColumns",
                 columns: [
-                { title: "用户ID", field: "code" },
+                { title: "用户ID", field: "code", width: '100' },
                 { title: "同设备", field: "users" }
                 ],
                 data: [] // 默认无数据
@@ -381,26 +383,6 @@
     // 查询同设备
     const batchSearchDevice = async () => {
         window.showModel();
-
-        // const input = prompt('请输入用户 code，多个用英文/中文逗号分隔：');
-    
-        // if (!input) return false
-
-        // const cleaned = input.replace(/，/g, ',');
-        // const trimmed = cleaned.replace(/\s+/g, '').replace(/^,+|,+$/g, '');
-        // const ucodes = trimmed.split(',').filter(Boolean);
-
-        // if(!ucodes?.length) return false
-
-        // const list = {}
-        // for (const code of ucodes) {
-        //     let id = await searchUserId(code)
-        //     if(!id) return false
-        //     let devices = await searchDevice(id)
-        //     list[code] = devices
-        // }
-        // console.log('查询结果', list)
-        // showGridTable(list)
     }
 
     // 查询同设备
