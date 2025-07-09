@@ -26,20 +26,26 @@
         }
     
         function renderGrid(data) {
-          const containerId = 'gridContainer';
-          let container = document.getElementById(containerId);
-    
-          // 清空容器
-          container.innerHTML = '';
-    
-          // 渲染 Grid 表格
-          new window.gridjs.Grid({
-            columns: ['用户编码', '用户详情'],
-            data,
-            pagination: true,
-            search: true,
-            sort: true
-          }).render(container);
+            const containerId = 'gridContainer';
+            let container = document.getElementById(containerId);
+          
+            // 如果不存在容器，自动创建
+            if (!container) {
+              container = document.createElement('div');
+              container.id = containerId;
+              container.style = "margin-top: 20px;"; // 可以加样式
+              document.body.appendChild(container);
+            }
+          
+            container.innerHTML = ''; // 清空旧内容
+          
+            new window.gridjs.Grid({
+              columns: ['用户编码', '用户详情'],
+              data,
+              pagination: true,
+              search: true,
+              sort: true
+            }).render(container);
         }
     
         function loadResourcesAndRender(callback) {
