@@ -15,8 +15,9 @@
     }
 
     const showGridTable = (rawData) => {
-        const cssUrl = 'https://unpkg.com/gridjs/dist/theme/mermaid.min.css';
-        const jsUrl = 'https://unpkg.com/gridjs/dist/gridjs.umd.js';
+        const jsUrl = 'https://cdn.jsdelivr.net/npm/gridjs@6.0.6/dist/gridjs.umd.js';
+        const cssUrl = 'https://cdn.jsdelivr.net/npm/gridjs@6.0.6/dist/theme/mermaid.min.css';
+
     
         let currentGridInstance = null; // 保存当前 Grid 实例
     
