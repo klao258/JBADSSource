@@ -14,112 +14,96 @@
         platform = '天胜娱乐'
     }
 
-    const showGridTable = (rawData) => {
-        const cssUrl = 'https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css';
-        const jsUrl = 'https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js';
-    
-        // 加载资源（只加载一次）
-        function loadTabulator(callback) {
-            if (!document.querySelector(`link[href="${cssUrl}"]`)) {
-                const css = document.createElement('link');
-                css.rel = 'stylesheet';
-                css.href = cssUrl;
-                document.head.appendChild(css);
+    const createModel = () => {
+        // 动态加载 Tabulator CSS
+        const tabulatorCSS = document.createElement('link');
+        tabulatorCSS.rel = 'stylesheet';
+        tabulatorCSS.href = 'https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css';
+        document.head.appendChild(tabulatorCSS);
+      
+        // 动态加载 Tabulator JS
+        const tabulatorScript = document.createElement('script');
+        tabulatorScript.src = 'https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js';
+        tabulatorScript.onload = () => {
+          // Tabulator 资源加载完成后创建弹窗
+          initPopup();
+        };
+        document.body.appendChild(tabulatorScript);
+      
+        function initPopup() {
+          // 添加基础样式
+          const style = document.createElement('style');
+          style.textContent = `
+            .my-popup-mask {
+              position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+              background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 9999;
             }
-            if (!window.Tabulator) {
-                const script = document.createElement('script');
-                script.src = jsUrl;
-                script.onload = callback;
-                document.head.appendChild(script);
-            } else {
-                callback();
+            .my-popup-content {
+              background: white; padding: 20px; border-radius: 8px; width: 80%; max-height: 90%;
+              display: flex; flex-direction: column;
             }
-        }
-    
-        // 格式化数据
-        function formatData(data) {
-            return Object.entries(data).map(([key, users]) => ({
-                code: key,
-                users: users.map(u => `${u.uname}(${u.ucode})`).join('，')
-            }));
-        }
-    
-        // 渲染弹窗
-        function renderTable(data) {
-            // 避免重复创建
-            if (document.getElementById('gridModal')) return;
-        
-            // 遮罩
-            const overlay = document.createElement('div');
-            overlay.id = 'gridModal';
-            overlay.style = `
-                position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
-                background-color: rgba(0,0,0,0.5);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            `;
-        
-            // 弹窗内容
-            const modal = document.createElement('div');
-            modal.style = `
-                background: white;
-                padding: 20px;
-                border-radius: 8px;
-                width: 80%;
-                max-height: 80%;
-                overflow: auto;
-                position: relative;
-            `;
-        
-            // 关闭按钮
-            const closeBtn = document.createElement('div');
-            closeBtn.innerText = '✖';
-            closeBtn.style = `
-                position: absolute;
-                top: 10px; right: 15px;
-                cursor: pointer;
-                font-size: 18px;
-                color: #666;
-            `;
-            closeBtn.onclick = () => document.body.removeChild(overlay);
-        
-            // 表格容器
-            const tableDiv = document.createElement('div');
-            tableDiv.id = 'gridContainer';
-            tableDiv.style = 'margin-top: 10px;';
-        
-            // 加入弹窗元素
-            modal.appendChild(closeBtn);
-            modal.appendChild(tableDiv);
-            overlay.appendChild(modal);
-            document.body.appendChild(overlay);
-        
-            // 渲染 Tabulator 表格
-            new Tabulator("#gridContainer", {
-                layout: "fitColumns",
-                height: "400px",
-                data,
-                columns: [
-                { title: "用户编码", field: "code", sorter: "string", width: "30%" },
-                { title: "用户详情", field: "users", sorter: "string" }
-                ]
-            });
-
-            const tabulator = document.querySelector('.tabulator');
-            if (tabulator) {
-            tabulator.style.backgroundColor = 'transparent';
+            .my-popup-header {
+              margin-bottom: 10px;
             }
+            .my-popup-header input {
+              padding: 6px; width: 300px; margin-right: 10px;
+            }
+            .my-popup-body {
+              flex: 1; overflow: auto;
+            }
+            .my-popup-close {
+              position: absolute; top: 10px; right: 20px; font-size: 20px; cursor: pointer;
+            }
+          `;
+          document.head.appendChild(style);
+      
+          // 创建弹窗 DOM
+          const popup = document.createElement('div');
+          popup.className = 'my-popup-mask';
+          popup.innerHTML = `
+            <div class="my-popup-content">
+              <div class="my-popup-close">×</div>
+              <div class="my-popup-header">
+                <input type="text" id="tab-search-input" placeholder="请输入 ucode，多个用英文逗号分隔" />
+                <button id="tab-search-btn">查询</button>
+              </div>
+              <div class="my-popup-body">
+                <div id="tabulator-table"></div>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(popup);
+      
+          // 关闭弹窗逻辑
+          popup.querySelector('.my-popup-close').onclick = () => popup.style.display = 'none';
+      
+          // 初始化表格
+          const table = new Tabulator("#tabulator-table", {
+            height: "300px",
+            layout: "fitColumns",
+            columns: [
+              { title: "用户ID", field: "ucode" },
+              { title: "同设备", field: "status" }
+            ],
+            data: [] // 默认无数据
+          });
+      
+          // 查询按钮点击逻辑
+          document.getElementById('tab-search-btn').onclick = () => {
+            const input = document.getElementById('tab-search-input').value.trim();
+            const ucodes = input.split(',').map(s => s.trim()).filter(Boolean);
+            // 模拟数据加载
+            const data = ucodes.map((u, i) => ({ id: i + 1, ucode: u, status: "正常" }));
+            table.setData(data);
+          };
+      
+          // 暴露一个方法用于显示弹窗
+          window.showModel = () => {
+            popup.style.display = 'flex';
+          };
         }
-    
-        // 主流程
-        loadTabulator(() => {
-          const formatted = formatData(rawData);
-          renderTable(formatted);
-        });
     }
+    createModel()
 
 
     // 封装get请求
@@ -378,25 +362,27 @@
 
     // 查询同设备
     const batchSearchDevice = async () => {
-        const input = prompt('请输入用户 code，多个用英文/中文逗号分隔：');
+        window.showModel();
+
+        // const input = prompt('请输入用户 code，多个用英文/中文逗号分隔：');
     
-        if (!input) return false
+        // if (!input) return false
 
-        const cleaned = input.replace(/，/g, ',');
-        const trimmed = cleaned.replace(/\s+/g, '').replace(/^,+|,+$/g, '');
-        const ucodes = trimmed.split(',').filter(Boolean);
+        // const cleaned = input.replace(/，/g, ',');
+        // const trimmed = cleaned.replace(/\s+/g, '').replace(/^,+|,+$/g, '');
+        // const ucodes = trimmed.split(',').filter(Boolean);
 
-        if(!ucodes?.length) return false
+        // if(!ucodes?.length) return false
 
-        const list = {}
-        for (const code of ucodes) {
-            let id = await searchUserId(code)
-            if(!id) return false
-            let devices = await searchDevice(id)
-            list[code] = devices
-        }
-        console.log('查询结果', list)
-        showGridTable(list)
+        // const list = {}
+        // for (const code of ucodes) {
+        //     let id = await searchUserId(code)
+        //     if(!id) return false
+        //     let devices = await searchDevice(id)
+        //     list[code] = devices
+        // }
+        // console.log('查询结果', list)
+        // showGridTable(list)
     }
 
     // 查询同设备
