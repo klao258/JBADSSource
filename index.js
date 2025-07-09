@@ -438,8 +438,6 @@
         const doc = parser.parseFromString(html, "text/html");
         const rows = doc?.querySelectorAll?.(".pageContent .table tbody tr");
 
-        console.log(rows)
-
         if (rows.length === 0) return []; // ❌ 无数据
         const result = [];
         rows.forEach(tr => {
