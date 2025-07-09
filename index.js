@@ -15,13 +15,11 @@
     }
 
     const showGridTable = (rawData) => {
-        const cssUrl = 'https://cdn.jsdelivr.net/npm/gridjs@6.0.6/dist/theme/mermaid.min.css';
-        const jsUrl = 'https://cdn.jsdelivr.net/npm/gridjs@6.0.6/dist/gridjs.umd.js';
+        const cssUrl = 'https://unpkg.com/tabulator-tables@5.5.0/dist/css/tabulator.min.css';
+        const jsUrl = 'https://unpkg.com/tabulator-tables@5.5.0/dist/js/tabulator.min.js';
     
-        let currentGridInstance = null; // 用于销毁上一个实例
-    
-        // 1. 加载资源（CSS + JS）
-        function loadGridResources(callback) {
+        // 加载资源：Tabulator 的 CSS 和 JS
+        function loadTabulator(callback) {
           // 加载 CSS（只加载一次）
           if (!document.querySelector(`link[href="${cssUrl}"]`)) {
             const css = document.createElement('link');
@@ -31,7 +29,7 @@
           }
     
           // 加载 JS（只加载一次）
-          if (!window.gridjs) {
+          if (!window.Tabulator) {
             const script = document.createElement('script');
             script.src = jsUrl;
             script.onload = callback;
@@ -41,47 +39,45 @@
           }
         }
     
-        // 2. 格式化原始对象为二维数组
+        // 格式化原始数据
         function formatData(data) {
-          return Object.entries(data).map(([key, users]) => {
-            const userStr = users.map(u => `${u.uname}(${u.ucode})`).join('，');
-            return [key, userStr];
-          });
+          return Object.entries(data).map(([key, users]) => ({
+            code: key,
+            users: users.map(u => `${u.uname}(${u.ucode})`).join('，')
+          }));
         }
     
-        // 3. 渲染 Grid 表格
-        function renderGrid(data) {
+        // 渲染表格
+        function render(data) {
           let container = document.getElementById('gridContainer');
           if (!container) {
             container = document.createElement('div');
             container.id = 'gridContainer';
-            container.style = 'margin-top: 20px; padding: 10px;';
+            container.style = 'margin-top: 20px;';
             document.body.appendChild(container);
           }
-          container.innerHTML = ''; // 清空旧内容
+          container.innerHTML = '';
     
-          // 销毁之前的实例，避免冲突
-          if (currentGridInstance && typeof currentGridInstance.destroy === 'function') {
-            currentGridInstance.destroy();
-          }
-    
-          currentGridInstance = new window.gridjs.Grid({
-            columns: ['用户编码', '用户详情'],
-            data: data,
+          new Tabulator(container, {
+            height: "300px",
+            layout: "fitColumns",
+            data,
+            columns: [
+              { title: "用户编码", field: "code", sorter: "string", headerFilter: true },
+              { title: "用户详情", field: "users", sorter: "string", headerFilter: true }
+            ],
             pagination: true,
-            search: true,
-            sort: true
+            paginationSize: 5
           });
-    
-          currentGridInstance.render(container);
         }
     
-        // 执行流程
-        loadGridResources(() => {
+        // 加载并渲染
+        loadTabulator(() => {
           const formatted = formatData(rawData);
-          renderGrid(formatted);
+          render(formatted);
         });
     }
+
 
     // 封装get请求
     const get = async (path, params = {}) => {
