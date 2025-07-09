@@ -103,11 +103,9 @@
             height: "400px",
             data,
             columns: [
-              { title: "用户编码", field: "code", sorter: "string", headerFilter: true },
-              { title: "用户详情", field: "users", sorter: "string", headerFilter: true }
-            ],
-            pagination: true,
-            paginationSize: 5
+              { title: "用户编码", field: "code", sorter: "string", width: "30%" },
+              { title: "用户详情", field: "users", sorter: "string" }
+            ]
           });
         }
     
