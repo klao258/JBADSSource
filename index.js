@@ -346,7 +346,7 @@
             users.push({ platform, ucode: v.upcode })
         })
         const map = new Map();
-        map.filter(item => {
+        users = users.filter(item => {
             if (!map.has(item[key])) {
               map.set(item[key], true);
               return true;
