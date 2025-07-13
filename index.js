@@ -319,7 +319,7 @@
         console.log('准备同步到数据库')
 
         // 所有数据
-        const userList = []
+        let userList = []
 
         // 不在这个面板直接return
         const tableID = $('.navTab-tab .selected').attr('tabid')
