@@ -26,7 +26,7 @@
             console.log('隐藏')
         }
         
-    });
+    }, true);
 
     const createModel = () => {
         // 动态加载 Tabulator CSS
