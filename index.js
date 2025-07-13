@@ -340,16 +340,21 @@
             userList.push({ uinfoUrl, uname, ucode, upcode, upname, amount, _this })
         })
 
-        let arr = []
+        let users = []
         userList?.map(v => {
-            arr.push({ platform, ucode: v.ucode })
-            arr.push({ platform, ucode: v.upcode })
+            users.push({ platform, ucode: v.ucode })
+            users.push({ platform, ucode: v.upcode })
         })
-        let users = Array.from(new Map(arr.map(item => [item.ucode, item])).values());    // 去重
+        const map = new Map();
+        users.filter(item => {
+            if (map.has(item['ucode'])) return false
+            map.set(item['ucode'], true);
+            return true;
+        });
             
         let userRes = await post('/user/batch', { users })
 
-        console.log('userRes', arr, users, userRes)
+        console.log('userRes', users, userRes)
         return false
         
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
