@@ -361,7 +361,7 @@
             } else {
                 // 新用户
                 item['platform'] = platform // 平台
-                item['upname'] =  userRes?.find(v => v.ucode === item.upcode)?.upname || '' // 找上级
+                item['upname'] =  userRes?.find(v => v.ucode === item.upcode)?.uname || '' // 找上级
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 $(uinfohtml).find('.pageFormContent dl').each(function(){
