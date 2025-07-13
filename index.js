@@ -233,7 +233,7 @@
             id: "buttonContainer",
         }).css({
             position: "fixed",
-            top: "140px",
+            top: "115px",
             right: "0",
             display: "none",
             flexWrap: "wrap",
