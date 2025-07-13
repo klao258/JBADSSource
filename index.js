@@ -13,6 +13,7 @@
     } else if(window.location.host.includes('tsyl6666')) {
         platform = '天胜娱乐'
     }
+    const validIds = ['001001001001', '001001001002'];
 
     document.addEventListener('click', function (e) {
         let timer = setTimeout(() => {
@@ -20,7 +21,6 @@
             timer = null
 
             const selected = document.querySelector('.navTab-tab .selected');
-            const validIds = ['001001001001', '001001001002'];
             const tabid = selected?.getAttribute('tabid');
             if (validIds.includes(tabid)) {
                 $('#buttonContainer').css('display', 'flex');
@@ -311,7 +311,7 @@
 
         // 不在这个面板直接return
         const tableID = $('.navTab-tab .selected').attr('tabid')
-        if(tableID !== '001001010003') return false
+        if(!validIds.includes(tableID)) return false
 
         let main = null
         $('.navTab-panel .page').each(function() {
@@ -328,7 +328,8 @@
 
         if(!TRList.length) return false
 
-
+        console.log('所有行', TRList)
+        return false
         TRList.each(async (index, item) => {
             let _this = $(item)
             let children = $(item)?.children()
