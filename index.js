@@ -349,7 +349,7 @@
             
         let userRes = await post('/user/batch', { users })
 
-        console.log('userRes', users, userRes)
+        console.log('userRes', arr, users, userRes)
         return false
         
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
