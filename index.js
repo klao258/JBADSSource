@@ -402,7 +402,7 @@
             delete item['_this']
             delete item['uinfoUrl']
         }
-        userList.filter(v => v.ads)
+        userList = userList.filter(v => v.ads?.length)
 
         console.log('userList', userList)
         return false
