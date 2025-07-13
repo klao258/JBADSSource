@@ -375,7 +375,7 @@
                 // 新用户
                 item['platform'] = platform // 平台
                 item['upname'] =  userRes?.find(v => +v.ucode === +item.upcode)?.uname || tginfo[item.upcode] || '' // 找上级
-                console.log(item['upname', item])
+                console.log(item['upname'], item)
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 $(uinfohtml).find('.pageFormContent dl').each(function(){
