@@ -13,7 +13,11 @@
     } else if(window.location.host.includes('tsyl6666')) {
         platform = '天胜娱乐'
     }
-    const validIds = ['001001001001', '001001001002'];
+    const validIds = [
+        '001001001001', // 推广后台
+        '001001001002', // 推广后台
+        '001001010003', // 天胜后台
+    ];
 
     document.addEventListener('click', function (e) {
         let timer = setTimeout(() => {
