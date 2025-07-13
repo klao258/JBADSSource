@@ -209,7 +209,7 @@
     // 创建更新按钮
     const createView = () => {
         let uname = $('#header .headerNav .nav').text()
-        let isLK = uname === 'JBADS' || uname === 'TSADS'
+        let isLK = /TSADS|JBADS|老k/i.test(uname)
         console.log('isLK', isLK);
 
         // 创建容器
