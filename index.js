@@ -16,8 +16,16 @@
     const validIds = [
         '001001001001', // 推广后台
         '001001001002', // 推广后台
-        '001001010003', // 天胜后台
     ];
+
+    const tginfo = {
+        "53377": "金貝推广-A仔",
+        "64777": "金貝推广-光头",
+        "64782": "金貝推广-光头",
+        "22780": "天胜推广-大山",
+        "22782": "天胜推广-安仔",
+        "68661": "天胜推广-八哥"
+    }
 
     document.addEventListener('click', function (e) {
         let timer = setTimeout(() => {
@@ -365,7 +373,7 @@
             } else {
                 // 新用户
                 item['platform'] = platform // 平台
-                item['upname'] =  userRes?.find(v => v.ucode === item.upcode)?.uname || '' // 找上级
+                item['upname'] =  userRes?.find(v => v.ucode === item.upcode)?.uname || tginfo[item.upcode] || '' // 找上级
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 $(uinfohtml).find('.pageFormContent dl').each(function(){
