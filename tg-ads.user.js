@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JB旗下数据源脚本
 // @namespace    https://klao258.github.io/
-// @version      2025.06.19-21:57:13
+// @version      2025.07.13-17:14:22
 // @description  JB旗下ADS数据源 
 // @author       老k
 // @match        http://jbht888.top/*
