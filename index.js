@@ -387,7 +387,7 @@
                     } else if (label?.includes('飞机@编码')){
                         item['tgname'] = encryptAESBrowser((value?.trim() || ''))
                     } else if (label?.includes('ads')){
-                        item['ads'] = $(this).find('dd')?.text()?.trim() || ''
+                        item['ads'] = $(this).find('dd')?.text()?.trim() || userRes?.find(v => v.ucode === item.upcode)?.ads || item.upcode
                     }
                 })
             }
