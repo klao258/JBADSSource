@@ -340,12 +340,12 @@
             userList.push({ uinfoUrl, uname, ucode, upcode, upname, amount, _this })
         })
 
-        let users = []
+        let arr = []
         userList?.map(v => {
-            users.push({ platform, ucode: v.ucode })
-            users.push({ platform, ucode: v.upcode })
+            arr.push({ platform, ucode: v.ucode })
+            arr.push({ platform, ucode: v.upcode })
         })
-        users = Array.from(new Map(users.map(item => [item.ucode, item])).values());
+        let users = Array.from(new Map(arr.map(item => [item.ucode, item])).values());    // 去重
             
         let userRes = await post('/user/batch', { users })
 
