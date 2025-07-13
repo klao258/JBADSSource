@@ -15,16 +15,15 @@
     }
 
     document.addEventListener('click', function (e) {
-        const selected = document.querySelector('.navTab-tab .selected');
-        const validIds = ['001001001001', '001001001002'];
-        const tabid = selected?.getAttribute('tabid');
-
         let timer = setTimeout(() => {
             clearTimeout(timer)
             timer = null
 
+            const selected = document.querySelector('.navTab-tab .selected');
+            const validIds = ['001001001001', '001001001002'];
+            const tabid = selected?.getAttribute('tabid');
             if (validIds.includes(tabid)) {
-                $('#buttonContainer').show()
+                $('#buttonContainer').css('display', 'flex');
             } else {
                 $('#buttonContainer').hide()
             }
@@ -236,7 +235,7 @@
             position: "fixed",
             top: "140px",
             right: "0",
-            display: "flex",
+            display: "none",
             flexWrap: "wrap",
             gap: "2px 5px",
             zIndex: 1,
