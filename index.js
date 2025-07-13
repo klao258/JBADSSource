@@ -331,13 +331,13 @@
             let href = $(item).find('a[title="用户查看"]').attr('href')
 
             let uinfoUrl = `${window.location.origin}/${href}`
-            let ucode = children?.eq(2)?.text()
-            let uname = children?.eq(1)?.children()?.eq(0)?.text()
-            let upcode = children?.eq(5)?.text() || '-'
-            let upname = children?.eq(6)?.text()
-            let amount = children?.eq(9)?.text()
+            let uname = children?.eq(1)?.children()?.eq(0)?.text()  // 用户名
+            let ucode = children?.eq(2)?.text() // 用户id
+            let upcode = children?.eq(4)?.text() || '-' // 上级编码
+            let upname = '' // children?.eq(6)?.text()    // 上级名称
+            let amount = children?.eq(7)?.text()    // 总充值
 
-            userList.push({ uinfoUrl, ucode, uname, upcode, upname, amount, _this })
+            userList.push({ uinfoUrl, uname, ucode, upcode, upname, amount, _this })
         })
 
         let users = userList?.map(v => ({ platform, ucode: v.ucode }))
