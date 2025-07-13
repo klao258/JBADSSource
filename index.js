@@ -340,10 +340,16 @@
             userList.push({ uinfoUrl, uname, ucode, upcode, upname, amount, _this })
         })
 
-        let users = userList?.map(v => ({ platform, ucode: v.ucode }))
-
-        console.log('userList', userList)
+        let users = []
+        userList?.map(v => {
+            users.push({ platform, ucode: v.ucode })
+            users.push({ platform, ucode: v.upcode })
+        })
+            
+        console.log('users', users)
         return false
+
+        
         let userRes = await post('/user/batch', { users })
         
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
