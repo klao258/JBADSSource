@@ -313,6 +313,40 @@
             });
         })
     }
+
+    // 根据用户ID获取用户名称
+    const getUserInfo = async (ucode) => {
+        const params = new URLSearchParams();
+        params.append('ucode', ucode);
+        params.append('type', '4');
+      
+        const keys = [
+          "zdlucode", "uname", "upucode", "scztimes", "ecztimes", "ads", "status",
+          "starttime", "endtime", "loginstarttime", "loginendtime", 
+        ];
+      
+        keys.forEach(key => params.append(key, ''));
+      
+        const res = await fetch(`${window.location.origin}/cpuser`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+            },
+            body: params.toString(), // ⬅️ 转成 URL 编码字符串
+            credentials: "include" // ⬅️ 如果你登录了需要携带 cookie
+        });
+      
+        let html = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const rows = doc.querySelectorAll(".pageContent .table tbody tr");
+
+        if (rows.length === 0) return ''
+        const uname = doc.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(1)")?.textContent.trim();
+        return {
+            uname
+        }
+    }
     
     // 同步到库
     const asyncDB = async () => {
@@ -374,8 +408,11 @@
             } else {
                 // 新用户
                 item['platform'] = platform // 平台
-                item['upname'] =  userRes?.find(v => +v.ucode === +item.upcode)?.uname || tginfo[item.upcode] || '' // 找上级
-                console.log(item['upname'], item)
+                // item['upname'] =  userRes?.find(v => +v.ucode === +item.upcode)?.uname || tginfo[item.upcode] || '' // 找上级
+                // console.log(item['upname'], item)
+
+                item['upname'] = await getUserInfo(item.upcode)
+                console.log('上级名称', item['upname'])
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 $(uinfohtml).find('.pageFormContent dl').each(function(){
