@@ -345,6 +345,7 @@
             users.push({ platform, ucode: v.ucode })
             users.push({ platform, ucode: v.upcode })
         })
+        users = Array.from(new Map(users.map(item => [item.ucode, item])).values());
             
         let userRes = await post('/user/batch', { users })
 
