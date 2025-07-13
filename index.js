@@ -24,11 +24,11 @@
             timer = null
 
             if (validIds.includes(tabid)) {
-                $('#buttonContainer').toggle()
+                $('#buttonContainer').show()
             } else {
-                $('#buttonContainer').toggle()
+                $('#buttonContainer').hide()
             }
-        }, 500);
+        }, 100);
     }, true);
 
     const createModel = () => {
