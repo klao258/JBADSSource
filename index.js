@@ -14,6 +14,20 @@
         platform = '天胜娱乐'
     }
 
+    document.addEventListener('click', function (e) {
+        const selected = document.querySelector('.navTab-tab .selected');
+        const validIds = ['001001001001', '001001001002'];
+        const tabid = selected?.getAttribute('tabid');
+
+        if (validIds.includes(tabid)) {
+            // 显示
+            console.log('显示')
+        } else {
+            console.log('隐藏')
+        }
+        
+    });
+
     const createModel = () => {
         // 动态加载 Tabulator CSS
         const tabulatorCSS = document.createElement('link');
