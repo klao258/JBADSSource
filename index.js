@@ -369,6 +369,7 @@
                 item['createDate'] = user.createDate || ''
                 item['tgcode'] = user.tgcode || ''
                 item['tgname'] = user.tgname || ''
+                item['upname'] = user.upname || tginfo[item.upcode]
                 item['platform'] = user.platform || platform          
             } else {
                 // 新用户
