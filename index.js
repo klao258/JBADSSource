@@ -8,9 +8,9 @@
     const key = 'JB';
     
     let platform = ''
-    if(window.location.host.includes('jbht888')) {
+    if(window.location.host.includes('jbagency668')) {
         platform = '金貝飞投'
-    } else if(window.location.host.includes('zs696')) {
+    } else if(window.location.host.includes('tsyl6666')) {
         platform = '天胜娱乐'
     }
 
@@ -208,9 +208,9 @@
 
     // 创建更新按钮
     const createView = () => {
-        let isLK = $('#header .headerNav .nav').text()?.includes('老K')
+        let uname = $('#header .headerNav .nav').text()
+        let isLK = uname === 'JBADS' || uname === 'TSADS'
         console.log('isLK', isLK);
-        
 
         // 创建容器
         const $container = $("<div>", {
