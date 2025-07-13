@@ -358,7 +358,7 @@
             users.push({ platform, ucode: v.upcode })
         })
             
-        let userRes = await post('/user/batch', { users })
+        let userRes = await post('/user/batch', { users })  // 自己 + 上级
 
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
         for (const item of userList) {
@@ -373,7 +373,8 @@
             } else {
                 // 新用户
                 item['platform'] = platform // 平台
-                item['upname'] =  userRes?.find(v => v.ucode === item.upcode)?.uname || tginfo[item.upcode] || '' // 找上级
+                item['upname'] =  userRes?.find(v => +v.ucode === +item.upcode)?.uname || tginfo[item.upcode] || '' // 找上级
+                console.log(item['upname'])
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 $(uinfohtml).find('.pageFormContent dl').each(function(){
