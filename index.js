@@ -348,9 +348,6 @@
             
         let userRes = await post('/user/batch', { users })
 
-        console.log('userRes', users, userRes)
-        return false
-        
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
         for (const item of userList) {
             if(userRes?.length && userRes?.find(v => v.ucode === item.ucode)) {
@@ -363,7 +360,9 @@
                 item['platform'] = user.platform || platform          
             } else {
                 // 新用户
-                item['platform'] = platform
+                item['platform'] = platform // 平台
+                item['upname'] =  userRes?.find(v => v.ucode === item.upcode)?.upname || '' // 找上级
+
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 $(uinfohtml).find('.pageFormContent dl').each(function(){
                     let label = $(this).find('dt')?.text()
@@ -392,6 +391,9 @@
             delete item['uinfoUrl']
         }
 
+        console.log('userList', userList)
+
+        return false
         await post('/user/sync', { users: userList })
     }
 
