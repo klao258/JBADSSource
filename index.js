@@ -387,7 +387,7 @@
                     } else if (label?.includes('飞机@编码')){
                         item['tgname'] = encryptAESBrowser((value?.trim() || ''))
                     } else if (label?.includes('ads')){
-                        item['ads'] = $(this).find('dd')?.text()?.trim() || `${platform}-${item.upcode}-${item.upname}`
+                        item['ads'] = $(this).find('dd')?.text()?.trim() || ''
                     }
                 })
             }
@@ -402,9 +402,9 @@
             delete item['_this']
             delete item['uinfoUrl']
         }
+        userList.filter(v => v.ads)
 
         console.log('userList', userList)
-
         return false
         await post('/user/sync', { users: userList })
     }
