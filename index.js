@@ -270,8 +270,8 @@
         const buttons = [
             createButton("同步到库", "cbtn", () => asyncDB(), false),
             createButton("按上级统计", "cbtn", () => getPcodeData(), false),
-            createButton("统计帖子效果", "cbtn", () => getAdsStatis(), false),
-            createButton("批量查询同设备", "device", () => batchSearchDevice(), true),
+            createButton("按帖子统计", "cbtn", () => getAdsStatis(), false),
+            createButton("批量查同设备", "device", () => batchSearchDevice(), true),
             
             
             // createButton("同步DB", "dbBtn", () => updateDB()),
