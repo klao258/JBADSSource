@@ -320,16 +320,11 @@
             }
         })
 
-        // 没有筛选ads直接return
-        if(!($('input[name="ads"]')?.val()?.toLocaleLowerCase()?.includes('ads'))) return false
-
         // 获取所有的行
         let TRList = main.find('.grid .gridTbody tr')
 
         if(!TRList.length) return false
 
-        console.log('所有行', TRList)
-        return false
         TRList.each(async (index, item) => {
             let _this = $(item)
             let children = $(item)?.children()
@@ -346,6 +341,9 @@
         })
 
         let users = userList?.map(v => ({ platform, ucode: v.ucode }))
+
+        console.log('userList', userList)
+        return false
         let userRes = await post('/user/batch', { users })
         
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
