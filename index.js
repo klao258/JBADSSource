@@ -19,13 +19,16 @@
         const validIds = ['001001001001', '001001001002'];
         const tabid = selected?.getAttribute('tabid');
 
-        if (validIds.includes(tabid)) {
-            // 显示
-            console.log('显示')
-        } else {
-            console.log('隐藏')
-        }
-        
+        let timer = setTimeout(() => {
+            clearTimeout(timer)
+            timer = null
+
+            if (validIds.includes(tabid)) {
+                $('#buttonContainer').toggle()
+            } else {
+                $('#buttonContainer').toggle()
+            }
+        }, 500);
     }, true);
 
     const createModel = () => {
