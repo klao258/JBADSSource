@@ -346,10 +346,12 @@
             users.push({ platform, ucode: v.upcode })
         })
         const map = new Map();
-        users.filter(item => {
-            if (map.has(item['ucode'])) return false
-            map.set(item['ucode'], true);
-            return true;
+        map.filter(item => {
+            if (!map.has(item[key])) {
+              map.set(item[key], true);
+              return true;
+            }
+            return false;
         });
             
         let userRes = await post('/user/batch', { users })
