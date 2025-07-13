@@ -5,7 +5,9 @@
 // @description  JB旗下ADS数据源 
 // @author       老k
 // @match        http://jbht888.top/*
+// @match        https://jbagency668.com/*
 // @match        https://zs696.cn/*
+// @match        https://tsyl6666.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=telegram.org
 // @updateURL    https://klao258.github.io/JBADSSource/tg-ads.user.js
 // @downloadURL  https://klao258.github.io/JBADSSource/tg-ads.user.js
