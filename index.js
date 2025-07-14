@@ -342,7 +342,7 @@
         const rows = doc.querySelectorAll(".pageContent .table tbody tr");
 
         if (rows.length === 0) return ''
-        const uname = doc.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(1)")?.textContent.trim();
+        const uname = doc.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(2)")?.textContent.trim();
         return {
             uname
         }
