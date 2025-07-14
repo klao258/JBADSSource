@@ -408,37 +408,40 @@
                 item['upname'] = await getUserInfo(item.upcode)?.['uname']  // 找到上级名称
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
-                $(uinfohtml).find('.pageFormContent dl').each(async function(){
-                    let label = $(this).find('dt')?.text()
-                    let value = $(this).find('dd input')?.val()
+                const dls = $(uinfohtml).find('.pageFormContent dl').toArray();
+                for (const dl of dls) {
+                    const $dl = $(dl);
+                    const label = $dl.find('dt')?.text();
+                    const value = $dl.find('dd input')?.val();
 
                     if (label?.includes('注册时间')) {
-                        item['createDate'] = value?.trim() || ''
-                    } else if(label?.includes('机器人id')){
-                        item['tgcode'] = encryptAESBrowser((value?.trim() || ''))
-                    } else if (label?.includes('飞机@编码')){
-                        item['tgname'] = encryptAESBrowser((value?.trim() || ''))
-                    } else if (label?.includes('ads')){
-                        let ads = $(this).find('dd')?.text()?.trim()
-                        if(ads?.length) {
-                            item['ads'] = ads
+                        item['createDate'] = value?.trim() || '';
+                    } else if (label?.includes('机器人id')) {
+                        item['tgcode'] = encryptAESBrowser((value?.trim() || ''));
+                    } else if (label?.includes('飞机@编码')) {
+                        item['tgname'] = encryptAESBrowser((value?.trim() || ''));
+                    } else if (label?.includes('ads')) {
+                        let ads = $dl.find('dd')?.text()?.trim();
+                        if (ads?.length) {
+                        item['ads'] = ads;
                         } else {
-                            // cpuser/view?ucode=71750  // 获取父级ads
-                            let uphtml = await getHTML(`${window.location.origin}/cpuser/view?ucode=${item.upcode}`)
+                        // 获取上级 HTML
+                        const uphtml = await getHTML(`${window.location.origin}/cpuser/view?ucode=${item.upcode}`);
+                        const uplist = $(uphtml).find('.pageFormContent dl').toArray();
 
-                            console.log('uphtml', uphtml)
-
-                            $(uphtml).find('.pageFormContent dl').each(async function(){
-                                let label = $(this).find('dt')?.text()
-                                let value = $(this).find('dd input')?.val()
-                                if (label?.includes('ads')){
-                                    let ads = $(this).find('dd')?.text()?.trim()
-                                    item['ads'] = ads
-                                }
-                            })
+                        for (const updl of uplist) {
+                            const $updl = $(updl);
+                            const uplabel = $updl.find('dt')?.text();
+                            const upval = $updl.find('dd input')?.val();
+                            if (uplabel?.includes('ads')) {
+                            let ads = $updl.find('dd')?.text()?.trim();
+                            item['ads'] = ads;
+                            break;
+                            }
+                        }
                         }
                     }
-                })
+                }
             }
 
             // 有找到更新ADS到视图，
