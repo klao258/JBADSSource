@@ -454,9 +454,6 @@
             delete item['uinfoUrl']
         }
         userList = userList.filter(v => v.ads?.length)
-
-        console.log('userList', userList)
-        return false
         await post('/user/sync', { users: userList })
     }
 
