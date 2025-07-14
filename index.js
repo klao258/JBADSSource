@@ -343,11 +343,7 @@
 
         if (rows.length === 0) return ''
         const uname = doc.querySelector(".pageContent .table tbody tr:nth-child(1) td:nth-child(2)")?.textContent.trim();
-        console.log('uname', uname);
-        
-        return ({
-            uname
-        })
+        return ({ uname })
     }
     
     // 同步到库
@@ -408,7 +404,8 @@
                 // 新用户
                 item['platform'] = platform // 平台
                 item['upname'] = await getUserInfo(item.upcode)?.['uname']  // 找到上级名称
-                
+                console.log(123, item['upname'])
+
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 const dls = $(uinfohtml).find('.pageFormContent dl').toArray();
                 for (const dl of dls) {
