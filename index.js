@@ -116,9 +116,9 @@
             const formatData = (list) => list.map(v => ({
                 ...v,
                 ucode: v.ucode,
-                uname: v.uname,
+                uname: v.uname || '',
                 devicesNum: v.devices?.length,
-                devicesStr: v.devices.map(u => `${u.uname}(${u.ucode})`).join('、')
+                devicesStr: v.devices.map(u => `${u.uname || ''}(${u.ucode})`).join('、')
             }))
             
       
@@ -135,7 +135,7 @@
                     // if(!id) return false
                     let devices = await searchDevice(ucode)
 
-                    list.push({ ucode, uname, devices })
+                    list.push({ ucode, devices })
                 }
                 table.setData(formatData(list));
             };
@@ -541,12 +541,11 @@
         rows.forEach(tr => {
             const tds = tr.querySelectorAll("td");
             if (tds.length >= 6) {
-            result.push({
-                uname: tds[1].innerText.trim(),
-                ucode: tds[2].innerText.trim(),
-                pname: tds[4].innerText.trim(),
-                pcode: tds[5].innerText.trim()
-            });
+                result.push({
+                    uname: tds[1].innerText.trim(),
+                    ucode: tds[2].innerText.trim(),
+                    pcode: tds[4].innerText.trim(),
+                });
             }
         });
         return result
