@@ -403,8 +403,9 @@
             } else {
                 // 新用户
                 item['platform'] = platform // 平台
-                item['upname'] = await getUserInfo(item.upcode)?.['uname']  // 找到上级名称
-                console.log(123, item['upname'])
+                let upname = await getUserInfo(item.upcode) // 找到上级名称
+                item['upname'] = upname
+                console.log(123, upname)
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
                 const dls = $(uinfohtml).find('.pageFormContent dl').toArray();
