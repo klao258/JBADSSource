@@ -5,8 +5,7 @@
     /**
     *** 解密：const text = CryptoJS.AES.decrypt(encrypted, key).toString(CryptoJS.enc.Utf8);
     */
-    const key = 'JB';
-    
+
     let platform = ''
     if(window.location.host.includes('jbagency668')) {
         platform = '金貝飞投'
@@ -18,15 +17,7 @@
         '001001001002', // 推广后台
     ];
 
-    const tginfo = {
-        "53377": "金貝推广-A仔",
-        "64777": "金貝推广-光头",
-        "64782": "金貝推广-光头",
-        "22780": "天胜推广-大山",
-        "22782": "天胜推广-安仔",
-        "68661": "天胜推广-八哥"
-    }
-
+    // 全局监听点击事件
     document.addEventListener('click', function (e) {
         let timer = setTimeout(() => {
             clearTimeout(timer)
@@ -140,9 +131,9 @@
 
                 const list = []
                 for (const ucode of ucodes) {
-                    let {uname, id} = await searchUserId(ucode)
-                    if(!id) return false
-                    let devices = await searchDevice(id)
+                    // let {uname, id} = await searchUserId(ucode)
+                    // if(!id) return false
+                    let devices = await searchDevice(ucode)
 
                     list.push({ ucode, uname, devices })
                 }
@@ -535,9 +526,9 @@
         const id = rows?.[0]?.getAttribute?.("rel") || '';
         return { uname, id }
     };
-    const searchDevice = async (id) => {
+    const searchDevice = async (code) => {
         let timestamp = Date.now(); // 例如：1751961796751
-        let url = `http://jbht888.top/cpuser/cpuservisit?id2=${id}&_=${timestamp}`
+        let url = `${window.location.origin}/cpuser/cpuservisit?ucode2=${code}&_=${timestamp}`
 
         const res = await fetch(url);
         let html = await res.text();
