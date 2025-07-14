@@ -431,10 +431,13 @@
                         for (const updl of uplist) {
                             const $updl = $(updl);
                             const uplabel = $updl.find('dt')?.text();
-                            const upval = $updl.find('dd input')?.val();
                             if (uplabel?.includes('ads')) {
                                 let ads = $updl.find('dd')?.text()?.trim();
-                                item['ads'] = ads;
+                                if(ads?.length){
+                                    item['ads'] = ads;
+                                } else {
+                                    item['ads'] = `ADS-${item.upcode}`;
+                                }
                                 break;
                             }
                         }
