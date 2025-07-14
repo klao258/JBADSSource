@@ -420,6 +420,7 @@
                         item['tgname'] = encryptAESBrowser((value?.trim() || ''))
                     } else if (label?.includes('ads')){
                         let ads = $(this).find('dd')?.text()?.trim()
+                        console.log('ads信息', ads)
                         if(ads?.length) {
                             item['ads'] = ads
                         } else {
