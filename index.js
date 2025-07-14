@@ -105,7 +105,7 @@
                 height: "300px",
                 layout: "fitColumns",
                 columns: [
-                    { title: "用户名", field: "uname", width: '100' },
+                    { title: "用户昵称", field: "uname", width: '100' },
                     { title: "用户id", field: "ucode", width: '100' },
                     { title: "同设备个数", field: "devicesNum", width: '100' },
                     { title: "同设备明细", field: "devicesStr" }
@@ -135,7 +135,7 @@
                     // if(!id) return false
                     let devices = await searchDevice(ucode)
 
-                    list.push({ ucode, devices })
+                    list.push({ uname: devices[0]?.uname || '', ucode, devices })
                 }
                 table.setData(formatData(list));
             };
