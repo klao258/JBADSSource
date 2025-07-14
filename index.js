@@ -423,7 +423,7 @@
                     } else if (label?.includes('ads')) {
                         let ads = $dl.find('dd')?.text()?.trim();
                         if (ads?.length) {
-                        item['ads'] = ads;
+                            item['ads'] = ads;
                         } else {
                         // 获取上级 HTML
                         const uphtml = await getHTML(`${window.location.origin}/cpuser/view?ucode=${item.upcode}`);
@@ -434,9 +434,9 @@
                             const uplabel = $updl.find('dt')?.text();
                             const upval = $updl.find('dd input')?.val();
                             if (uplabel?.includes('ads')) {
-                            let ads = $updl.find('dd')?.text()?.trim();
-                            item['ads'] = ads;
-                            break;
+                                let ads = $updl.find('dd')?.text()?.trim();
+                                item['ads'] = ads;
+                                break;
                             }
                         }
                         }
