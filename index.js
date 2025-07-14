@@ -387,35 +387,28 @@
         })
 
         let users = []
-        userList?.map(v => {
-            users.push({ platform, ucode: v.ucode })
-            users.push({ platform, ucode: v.upcode })
-        })
+        userList?.map(v => users.push({ platform, ucode: v.ucode }))
             
         let userRes = await post('/user/batch', { users })  // 自己 + 上级
 
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
         for (const item of userList) {
-            if(userRes?.length && userRes?.find(v => v.ucode === item.ucode)) {
+            let user = userRes.find(v => v.ucode === item.ucode)
+            if(userRes?.length && user) {
                 // 已经存在的用户
-                let user = userRes.find(v => v.ucode === item.ucode)
                 item['ads'] = user.ads || ''
                 item['createDate'] = user.createDate || ''
                 item['tgcode'] = user.tgcode || ''
                 item['tgname'] = user.tgname || ''
-                item['upname'] = user.upname || tginfo[item.upcode]
+                item['upname'] = user.upname || ''
                 item['platform'] = user.platform || platform          
             } else {
                 // 新用户
                 item['platform'] = platform // 平台
-                // item['upname'] =  userRes?.find(v => +v.ucode === +item.upcode)?.uname || tginfo[item.upcode] || '' // 找上级
-                // console.log(item['upname'], item)
-
-                item['upname'] = await getUserInfo(item.upcode)
-                console.log('上级名称', item['upname'])
+                item['upname'] = await getUserInfo(item.upcode)?.['uname']  // 找到上级名称
 
                 let uinfohtml = await getHTML(item.uinfoUrl)
-                $(uinfohtml).find('.pageFormContent dl').each(function(){
+                $(uinfohtml).find('.pageFormContent dl').each(async function(){
                     let label = $(this).find('dt')?.text()
                     let value = $(this).find('dd input')?.val()
 
@@ -426,7 +419,21 @@
                     } else if (label?.includes('飞机@编码')){
                         item['tgname'] = encryptAESBrowser((value?.trim() || ''))
                     } else if (label?.includes('ads')){
-                        item['ads'] = $(this).find('dd')?.text()?.trim() || userRes?.find(v => v.ucode === item.upcode)?.ads || item.upcode
+                        let ads = $(this).find('dd')?.text()?.trim()
+                        if(ads?.length) {
+                            item['ads'] = ads
+                        } else {
+                            // cpuser/view?ucode=71750  // 获取父级ads
+                            let uphtml = await getHTML(`${window.location.origin}/cpuser/view?ucode=${item.upcode}`)
+                            $(uphtml).find('.pageFormContent dl').each(async function(){
+                                let label = $(this).find('dt')?.text()
+                                let value = $(this).find('dd input')?.val()
+                                if (label?.includes('ads')){
+                                    let ads = $(this).find('dd')?.text()?.trim()
+                                    item['ads'] = ads
+                                }
+                            })
+                        }
                     }
                 })
             }
