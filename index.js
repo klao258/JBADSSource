@@ -420,12 +420,14 @@
                         item['tgname'] = encryptAESBrowser((value?.trim() || ''))
                     } else if (label?.includes('ads')){
                         let ads = $(this).find('dd')?.text()?.trim()
-                        console.log('ads信息', ads)
                         if(ads?.length) {
                             item['ads'] = ads
                         } else {
                             // cpuser/view?ucode=71750  // 获取父级ads
                             let uphtml = await getHTML(`${window.location.origin}/cpuser/view?ucode=${item.upcode}`)
+
+                            console.log('uphtml', uphtml)
+
                             $(uphtml).find('.pageFormContent dl').each(async function(){
                                 let label = $(this).find('dt')?.text()
                                 let value = $(this).find('dd input')?.val()
