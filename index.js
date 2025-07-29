@@ -421,7 +421,7 @@
         let users = [];
         userList?.map((v) => users.push({ platform, ucode: v.ucode }));
 
-        const tmp = users.filter(
+        const tmp = userList.filter(
             (v) =>
                 +v["amount"] > 200 &&
                 ["53377", "64782", "64777"].includes(v.upcode)
