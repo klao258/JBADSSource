@@ -422,14 +422,14 @@
         userList?.map((v) => users.push({ platform, ucode: v.ucode }));
 
         const tmp = [];
-        userList.map((v) => {
+        userList.map(async (v) => {
             if (
                 +v["amount"] > 200 &&
                 !["53377", "64782", "64777"].includes(v.upcode)
             ) {
                 tmp.push({
                     uname: v.uname,
-                    tgname: decryptAES(v.tgname),
+                    tgname: await decryptAES(v.tgname),
                     amount: v.amount,
                 });
             }
