@@ -403,12 +403,14 @@
             let uinfoUrl = `${window.location.origin}/${href}`;
             let uname = children?.eq(1)?.children()?.eq(0)?.text(); // 用户名
             let ucode = children?.eq(2)?.text(); // 用户id
+            let tgnameText = children?.eq(3)?.text(); // 用户名
             let upcode = children?.eq(4)?.text() || "-"; // 上级编码
             let upname = ""; // children?.eq(6)?.text()    // 上级名称
             let amount = children?.eq(7)?.text(); // 总充值
 
             userList.push({
                 uinfoUrl,
+                tgnameText,
                 uname,
                 ucode,
                 upcode,
@@ -429,7 +431,7 @@
             ) {
                 tmp.push({
                     uname: v.uname,
-                    tgname: await decryptAES(v.tgname),
+                    tgname: tgnameText,
                     amount: v.amount,
                 });
             }
