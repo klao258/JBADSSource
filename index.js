@@ -431,7 +431,7 @@
             ) {
                 tmp.push({
                     uname: v.uname,
-                    tgname: tgnameText,
+                    tgname: v.tgnameText,
                     amount: v.amount,
                 });
             }
