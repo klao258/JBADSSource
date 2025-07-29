@@ -421,19 +421,18 @@
         let users = [];
         userList?.map((v) => users.push({ platform, ucode: v.ucode }));
 
+        const tmp = users.filter(
+            (v) =>
+                +v["amount"] > 200 &&
+                ["53377", "64782", "64777"].includes(v.upcode)
+        );
+        console.log(tmp);
+
         let userRes = await post("/user/batch", { users }); // 自己 + 上级
 
         // 循环去库里查找，有找到更新ADS到视图， 更新总充值到库， 没有找到获取ADS值，在一起更新到库
         for (const item of userList) {
             let user = userRes.find((v) => v.ucode === item.ucode);
-            if (
-                user &&
-                +user["amount"] > 200 &&
-                ["53377", "64782", "64777"].includes(user.upcode)
-            ) {
-                console.log(item);
-            }
-
             if (userRes?.length && user) {
                 // 已经存在的用户
                 item["ads"] = user.ads || "";
