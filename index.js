@@ -423,20 +423,20 @@
         let users = [];
         userList?.map((v) => users.push({ platform, ucode: v.ucode }));
 
-        const tmp = [];
-        userList.map(async (v) => {
-            if (
-                +v["amount"] > 200 &&
-                !["53377", "64782", "64777"].includes(v.upcode)
-            ) {
-                tmp.push({
-                    uname: v.uname,
-                    tgname: v.tgnameText,
-                    amount: v.amount,
-                });
-            }
-        });
-        console.log(tmp);
+        // const tmp = [];
+        // userList.map(async (v) => {
+        //     if (
+        //         +v["amount"] > 200 &&
+        //         !["53377", "64782", "64777"].includes(v.upcode)
+        //     ) {
+        //         tmp.push({
+        //             uname: v.uname,
+        //             tgname: v.tgnameText,
+        //             amount: v.amount,
+        //         });
+        //     }
+        // });
+        // console.log(tmp);
 
         let userRes = await post("/user/batch", { users }); // 自己 + 上级
 
