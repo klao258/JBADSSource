@@ -421,11 +421,19 @@
         let users = [];
         userList?.map((v) => users.push({ platform, ucode: v.ucode }));
 
-        const tmp = userList.filter(
-            (v) =>
+        const tmp = [];
+        userList.map((v) => {
+            if (
                 +v["amount"] > 200 &&
                 !["53377", "64782", "64777"].includes(v.upcode)
-        );
+            ) {
+                tmp.push({
+                    uname: v.uname,
+                    tgname: decryptAES(v.tgname),
+                    amount: v.amount,
+                });
+            }
+        });
         console.log(tmp);
 
         let userRes = await post("/user/batch", { users }); // 自己 + 上级
