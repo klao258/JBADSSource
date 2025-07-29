@@ -424,7 +424,7 @@
         const tmp = userList.filter(
             (v) =>
                 +v["amount"] > 200 &&
-                ["53377", "64782", "64777"].includes(v.upcode)
+                !["53377", "64782", "64777"].includes(v.upcode)
         );
         console.log(tmp);
 
