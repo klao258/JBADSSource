@@ -1,0 +1,24 @@
+{
+  "name": "jbadssource",
+  "version": "1.0.0",
+  "description": "JB旗下ADS数据源",
+  "main": "index.js",
+  "scripts": {
+    "build": "node minify.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klao258/JBADSSource.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klao258/JBADSSource/issues"
+  },
+  "homepage": "https://github.com/klao258/JBADSSource#readme",
+  "devDependencies": {
+    "uglify-js": "^3.19.3"
+  }
+}

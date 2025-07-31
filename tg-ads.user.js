@@ -112,6 +112,6 @@
         return false;
     }
     await loadMultipleScriptsAndWaitForAll(['https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js'], []);
-    await loadMultipleScriptsAndWaitForAll(['https://klao258.github.io/JBADSSource/index.js'], []);
+    await loadMultipleScriptsAndWaitForAll(['https://klao258.github.io/JBADSSource/index.min.js'], []);
 })();
   
