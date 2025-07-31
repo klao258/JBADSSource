@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JB旗下数据源脚本
 // @namespace    https://klao258.github.io/
-// @version      2025.07.13-17:14:22
+// @version      2025.07.31-18:17:12
 // @description  JB旗下ADS数据源 
 // @author       老k
 // @match        http://jbht888.top/*
@@ -112,6 +112,6 @@
         return false;
     }
     await loadMultipleScriptsAndWaitForAll(['https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js'], []);
-    await loadMultipleScriptsAndWaitForAll(['https://klao258.github.io/JBADSSource/index.js'], []);
+    await loadMultipleScriptsAndWaitForAll(['https://klao258.github.io/JBADSSource/index.min.js'], []);
 })();
   
